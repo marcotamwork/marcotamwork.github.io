@@ -3,17 +3,18 @@ name: Build and deploy Hugo site
 on:
   push:
     branches:
-      - "*"
+      - main
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
-          submodules: true # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -22,11 +23,7 @@ jobs:
           extended: true
 
       - name: Build
-        env:
-          # For maximum backward compatibility with Hugo modules
-          HUGO_ENVIRONMENT: production
-          HUGO_ENV: production
-        run: hugo --minify --gc
+        run: hugo --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
