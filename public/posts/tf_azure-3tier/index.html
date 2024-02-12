@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="en" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>IaC on 3-Tier architecture thorugh Terraform in Azure &middot; Marco</title>
+  <meta name="title" content="IaC on 3-Tier architecture thorugh Terraform in Azure &middot; Marco" />
+  
+  <meta name="description" content="IaC on 3-Tier architecture thorugh Terraform in Azure" />
+  <meta name="keywords" content="IaC, Azure, Terraform, " />
+  
+  
+  <link rel="canonical" href="https://example.org/posts/tf_azure-3tier/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.34d0d2d58f20ed766d52d04f372d3074a978b6daf593a65ef342f260735a5a015848bab979623824b489b5196af0efcb2fe259262618c20b224f2a9c19828043.css"
+    integrity="sha512-NNDS1Y8g7XZtUtBPNy0wdKl4ttr1k6Ze80LyYHNaWgFYSLq5eWI4JLSJtRlq8O/LL&#43;JZJiYYwgsiTyqcGYKAQw==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.1271c22a557a15f10b5d38d2c87e49503604cfeffebadc1e7c267934e4b9f3ba1b74d81371219f9681dab2141482fc4ed2a8b462b179f0ef43a5f76d0575e85b.js"
+    integrity="sha512-EnHCKlV6FfELXTjSyH5JUDYEz&#43;/&#43;utwefCZ5NOS587obdNgTcSGfloHashQUgvxO0qi0YrF58O9DpfdtBXXoWw==" data-copy="" data-copied=""></script>
+  
+  
+  <script src="/js/zoom.min.js"></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="IaC on 3-Tier architecture thorugh Terraform in Azure" />
+<meta property="og:description" content="IaC on 3-Tier architecture thorugh Terraform in Azure" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.org/posts/tf_azure-3tier/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-02-04T00:00:00+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="IaC on 3-Tier architecture thorugh Terraform in Azure"/>
+<meta name="twitter:description" content="IaC on 3-Tier architecture thorugh Terraform in Azure"/>
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "IaC on 3-Tier architecture thorugh Terraform in Azure",
+    "headline": "IaC on 3-Tier architecture thorugh Terraform in Azure",
+    
+    "abstract": "IaC on 3-Tier architecture thorugh Terraform in Azure",
+    "inLanguage": "en",
+    "url" : "https:\/\/example.org\/posts\/tf_azure-3tier\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Marco Tam"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-02-04T00:00:00\u002b00:00",
+    "datePublished": "2024-02-04T00:00:00\u002b00:00",
+    
+    "dateModified": "2024-02-04T00:00:00\u002b00:00",
+    
+    "keywords": ["IaC","Azure","Terraform"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "4195"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="Marco Tam" />
+  
+  
+  
+  <link href="mailto:marcotam.work@gmail.com" rel="me" />
+  
+  
+  <link href="https://www.facebook.com/marcotamkwanho" rel="me" />
+  
+  
+  <link href="https://github.com/marcotamwork" rel="me" />
+  
+  
+  <link href="https://www.instagram.com/marcotkhb/" rel="me" />
+  
+  
+  <link href="https://www.linkedin.com/in/marco-tam-25960a181/" rel="me" />
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.js" integrity=""></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>Skip to main content</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">Marco</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/posts/"  class="flex items-center">
+    
+    <p class="text-base font-medium text-gray-500 hover:text-gray-900" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center">
+    
+    <p class="text-base font-medium text-gray-500 hover:text-gray-900" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400 h-12"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button">
+                    <div class="flex items-center justify-center h-12 dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden h-12 dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" style="margin-right:5px">
+                <div class="flex items-center justify-center h-12 dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden h-12 dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" for="menu-controller" class="block">
+            <input type="checkbox" id="menu-controller" class="hidden" />
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li>
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center">
+        
+        <p class="text-bg font-bg text-gray-500 hover:text-gray-900" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center">
+        
+        <p class="text-bg font-bg text-gray-500 hover:text-gray-900" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+<script>
+    (function () {
+        var $mainmenu = $('.main-menu');
+        var path = window.location.pathname;
+        $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+            $(e).children('p').addClass('active');
+        });
+    })();
+</script>
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+
+
+<div id="hero" class="h-[150px] md:h-[200px]"></div>
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/sea_hudc93d08970391295408d117c8272887a_192120_1200x0_resize_q75_box.jpg);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+  <li class="inline hidden">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/"
+      >Welcome to my blog! :tada:</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline ">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/posts/"
+      >Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline hidden">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/posts/tf_azure-3tier/"
+      >IaC on 3-Tier architecture thorugh Terraform in Azure</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      IaC on 3-Tier architecture thorugh Terraform in Azure
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-02-04 00:00:00 &#43;0000 UTC">4 February 2024</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">20 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+  
+    
+  
+  
+
+<span class="mb-[2px]">
+  <a
+    href="#/posts/tf_azure-3tier/index.md"
+    class="text-lg hover:text-primary-500"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="Edit content"
+    ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path fill="currentColor" d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></svg>
+  </span>
+
+</span></a
+  >
+</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+<script type="text/javascript" src="/js/zen-mode.min.16f2e42a0014d476212e14c056b26b69bc85cb5de15352a5e3a1a0be498055dc1bf0926cef44baef1cc7fa2dfc5de0052892645cd3766598065f47b15c4bd44d.js" integrity="sha512-FvLkKgAU1HYhLhTAVrJrabyFy13hU1Kl46GgvkmAVdwb8JJs70S67xzH&#43;i38XeAFKJJkXNN2ZZgGX0exXEvUTQ=="></script>
+
+<span class="mb-[2px]">
+    <span id="zen-mode-button"
+          class="text-lg hover:text-primary-500"
+          title="Enable zen mode"
+          data-title-i18n-disable="Enable zen mode"
+          data-title-i18n-enable="Disable zen mode">
+        <span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+    <path fill="currentColor" d="M 12.980469 4 C 9.1204688 4 5.9804688 7.14 5.9804688 11 L 6 26 L 9.9804688 26 L 9.9804688 11 C 9.9804688 9.35 11.320469 8 12.980469 8 L 40.019531 8 C 41.679531 8 43.019531 9.35 43.019531 11 L 43.019531 39 C 43.019531 40.65 41.679531 42 40.019531 42 L 29 42 C 29 43.54 28.420938 44.94 27.460938 46 L 40.019531 46 C 43.879531 46 47.019531 42.86 47.019531 39 L 47.019531 11 C 47.019531 7.14 43.879531 4 40.019531 4 L 12.980469 4 z M 7 28 C 4.794 28 3 29.794 3 32 L 3 42 C 3 44.206 4.794 46 7 46 L 23 46 C 25.206 46 27 44.206 27 42 L 27 32 C 27 29.794 25.206 28 23 28 L 7 28 z M 7 32 L 23 32 L 23.001953 42 L 7 42 L 7 32 z"/>
+</svg>
+  </span>
+
+</span>
+    </span>
+</span>
+  
+
+  
+  
+</div>
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/iac/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    IaC
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/azure/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Azure
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/terraform/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Terraform
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+
+    
+
+    
+  
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open class="toc-right mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#what-we-are-going-to-build">What we are going to build</a></li>
+    <li><a href="#before-you-begin">Before you begin</a></li>
+    <li><a href="#step-1-set-up-tf-project">Step 1: Set up TF project</a>
+      <ul>
+        <li><a href="#create-azure-blob-storage">Create Azure Blob Storage</a></li>
+        <li><a href="#create-terraform-state">Create Terraform State</a></li>
+        <li><a href="#provider-configuration">Provider Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-2-creating-cloud-resource-with-terraform">Step 2: Creating Cloud Resource with Terraform</a>
+      <ul>
+        <li><a href="#variables-and-data">Variables and Data</a></li>
+        <li><a href="#resource-group">Resource Group</a></li>
+        <li><a href="#virtual-network">Virtual Network</a>
+          <ul>
+            <li><a href="#vnet">VNet</a></li>
+            <li><a href="#subnet">Subnet</a></li>
+          </ul>
+        </li>
+        <li><a href="#network-security-group">Network Security Group</a></li>
+        <li><a href="#user-assigned-identity">User Assigned Identity</a></li>
+        <li><a href="#key-vault">Key Vault</a></li>
+        <li><a href="#storage">Storage</a>
+          <ul>
+            <li><a href="#storage-account">Storage Account</a></li>
+            <li><a href="#network-rules-for-storage-account">Network Rules for Storage Account</a></li>
+            <li><a href="#data-encrytion-for-storage-account">Data Encrytion for Storage Account</a></li>
+            <li><a href="#storage-blob-container">Storage Blob Container</a></li>
+          </ul>
+        </li>
+        <li><a href="#mysql">MySQL</a>
+          <ul>
+            <li><a href="#private-dns-zone">Private DNS Zone</a></li>
+            <li><a href="#mysql-database-server">MySQL Database Server</a></li>
+            <li><a href="#active-directory-administrator">Active Directory administrator</a></li>
+            <li><a href="#server-audit-log">Server Audit Log</a></li>
+            <li><a href="#mysql-database">MySQL Database</a></li>
+          </ul>
+        </li>
+        <li><a href="#azure-kubernetes-cluster-aks">Azure Kubernetes Cluster (AKS)</a></li>
+        <li><a href="#log-analytics-workspace">Log Analytics Workspace</a>
+          <ul>
+            <li><a href="#kubernetes-cluster">Kubernetes Cluster</a></li>
+          </ul>
+        </li>
+        <li><a href="#azure-container-registry">Azure Container Registry</a></li>
+        <li><a href="#budget">Budget</a>
+          <ul>
+            <li><a href="#action-group">Action Group</a></li>
+            <li><a href="#budget-1">Budget</a></li>
+          </ul>
+        </li>
+        <li><a href="#backup">Backup</a>
+          <ul>
+            <li><a href="#backup-vault">Backup Vault</a></li>
+            <li><a href="#role-assignment-for-storage-backup">Role Assignment for Storage BackUp</a></li>
+            <li><a href="#backup-policy-and-backup-instance">Backup Policy and Backup Instance</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#what-we-are-going-to-build">What we are going to build</a></li>
+    <li><a href="#before-you-begin">Before you begin</a></li>
+    <li><a href="#step-1-set-up-tf-project">Step 1: Set up TF project</a>
+      <ul>
+        <li><a href="#create-azure-blob-storage">Create Azure Blob Storage</a></li>
+        <li><a href="#create-terraform-state">Create Terraform State</a></li>
+        <li><a href="#provider-configuration">Provider Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#step-2-creating-cloud-resource-with-terraform">Step 2: Creating Cloud Resource with Terraform</a>
+      <ul>
+        <li><a href="#variables-and-data">Variables and Data</a></li>
+        <li><a href="#resource-group">Resource Group</a></li>
+        <li><a href="#virtual-network">Virtual Network</a>
+          <ul>
+            <li><a href="#vnet">VNet</a></li>
+            <li><a href="#subnet">Subnet</a></li>
+          </ul>
+        </li>
+        <li><a href="#network-security-group">Network Security Group</a></li>
+        <li><a href="#user-assigned-identity">User Assigned Identity</a></li>
+        <li><a href="#key-vault">Key Vault</a></li>
+        <li><a href="#storage">Storage</a>
+          <ul>
+            <li><a href="#storage-account">Storage Account</a></li>
+            <li><a href="#network-rules-for-storage-account">Network Rules for Storage Account</a></li>
+            <li><a href="#data-encrytion-for-storage-account">Data Encrytion for Storage Account</a></li>
+            <li><a href="#storage-blob-container">Storage Blob Container</a></li>
+          </ul>
+        </li>
+        <li><a href="#mysql">MySQL</a>
+          <ul>
+            <li><a href="#private-dns-zone">Private DNS Zone</a></li>
+            <li><a href="#mysql-database-server">MySQL Database Server</a></li>
+            <li><a href="#active-directory-administrator">Active Directory administrator</a></li>
+            <li><a href="#server-audit-log">Server Audit Log</a></li>
+            <li><a href="#mysql-database">MySQL Database</a></li>
+          </ul>
+        </li>
+        <li><a href="#azure-kubernetes-cluster-aks">Azure Kubernetes Cluster (AKS)</a></li>
+        <li><a href="#log-analytics-workspace">Log Analytics Workspace</a>
+          <ul>
+            <li><a href="#kubernetes-cluster">Kubernetes Cluster</a></li>
+          </ul>
+        </li>
+        <li><a href="#azure-container-registry">Azure Container Registry</a></li>
+        <li><a href="#budget">Budget</a>
+          <ul>
+            <li><a href="#action-group">Action Group</a></li>
+            <li><a href="#budget-1">Budget</a></li>
+          </ul>
+        </li>
+        <li><a href="#backup">Backup</a>
+          <ul>
+            <li><a href="#backup-vault">Backup Vault</a></li>
+            <li><a href="#role-assignment-for-storage-backup">Role Assignment for Storage BackUp</a></li>
+            <li><a href="#backup-policy-and-backup-instance">Backup Policy and Backup Instance</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+ 
+<script>
+  (function () {
+    var $toc = $('#TableOfContents');
+    if ($toc.length > 0) {
+      var $window = $(window);
+
+      function onScroll() {
+        var currentScroll = $window.scrollTop();
+        var h = $('.anchor');
+        var id = "";
+        h.each(function (i, e) {
+          e = $(e);
+          if (e.offset().top - $(window).height()/3 <= currentScroll) {
+            id = e.attr('id');
+          }
+        });
+        var active = $toc.find('a.active');      
+        if (active.length == 1 && active.eq(0).attr('href') == '#' + id) return true;
+
+        active.each(function (i, e) {
+          
+            $(e).removeClass('active');
+          
+        });
+        $toc.find('a[href="#' + id + '"]').addClass('active')
+        $toc.find('a[href="#' + id + '"]').parentsUntil('#TableOfContents').each(function (i, e) {
+          $(e).children('a').parents('ul').show();          
+        });
+      }
+
+      $window.on('scroll', onScroll);
+      $(document).ready(function () {
+        
+        onScroll();
+      });
+    }
+  })();
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          <h2 class="relative group">Introduction 
+    <div id="introduction" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#introduction" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>Hello everyone! In this article, I will show you how to provision cloud resources for a 3-Tier architecture through IaC by Terraform and deploy the application in Kubernetes(AKS).</p>
+<p>Terraform as a cornerstone in IaC, revolutionizes modern IT practices, offering unparalleled benefits for reliability and agility. Notably, Terraform sets itself apart by being cloud-agnostic, allowing for the seamless integration of multiple providers and services, and creating a comprehensive representation and management of the entire infrastructure ecosystem and its associated services.</p>
+<p>With my experience on cloud architecture, I will demonstrate all processes from provisioning cloud infrastructure to application deployment. In this case, assuming our customer have DevOps Team to handle operational workloads and will deploy monitoring tools to observe performance of their applications, we deploy Kubernetes service instead of container service, in order to provide more control and flexibility.</p>
+<p>And in this blog, we will first go through all steps on how we provision cloud infrastructure in Azure by Terraform with well-designed cloud strategy, from considering aspect of security, data protection, monitoring, etc. So, let&rsquo;s get started!</p>
+<p>For more information on Terraform, please refer to <a href="https://developer.hashicorp.com/terraform"   target="_blank">
+    Terraform</a> and <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs"   target="_blank">
+    Azure Provider</a> for information and documents.</p>
+<h2 class="relative group">What we are going to build 
+    <div id="what-we-are-going-to-build" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#what-we-are-going-to-build" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>By the end of the article, you will have</p>
+<h2 class="relative group">Before you begin 
+    <div id="before-you-begin" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#before-you-begin" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>To complete this document you need the following resources:</p>
+<ul>
+<li>Azure Account</li>
+<li>Azure Service Principal</li>
+</ul>
+<p>To create Azure Account and Service Principal, please refer to <a href="https://azure.microsoft.com/en-us/free"   target="_blank">
+    Azure Account</a> and <a href="https://learn.microsoft.com/en-us/training/modules/authenticate-azure-deployment-pipeline-service-principals/3-create-service-principal-key?pivots=cli"   target="_blank">
+    Azure Service Principal</a>.</p>
+<blockquote>
+<p>Note: The whole demonstration will run in bash, Azzure CLI, and TF code for further CICD.</p>
+</blockquote>
+<h2 class="relative group">Step 1: Set up TF project 
+    <div id="step-1-set-up-tf-project" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#step-1-set-up-tf-project" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>The first thing for Terraform is to set up the location of the tf state. TF state tracks the current state of your infrastructure and resources and allows Terraform to manage and update them as needed. We choose Azure Blob Storage as backend for Terraform in our demonstration.</p>
+<blockquote>
+<p>Note:  Azure Blob Storage provides server-side encryption to protect your data, by preventing unauthorized access and safeguarding sensitive data.</p>
+</blockquote>
+<h3 class="relative group">Create Azure Blob Storage 
+    <div id="create-azure-blob-storage" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#create-azure-blob-storage" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Before you create blob storage, sign in with Azure CLI.</p>
+<pre tabindex="0"><code>APPID=&#34;&lt;app-id&gt;&#34;
+SPPASSWORD=&#34;&lt;password-or-cert&gt;&#34;
+SPTENANT=&#34;&lt;tenant&gt;&#34;
+
+# Login with service-principal
+az login --service-principal -u $APPID -p $SPPASSWORD --tenant $SPTENANT
+</code></pre><p>Then, run Azure CLI to create resource group, storage account and blob container for storing tf state.</p>
+<pre tabindex="0"><code>#!/bin/bash
+
+RESOURCE_GROUP_NAME=&#34;project-tfstate&#34;
+STORAGE_ACCOUNT_NAME=&#34;project-tfstate-sa&#34;
+CONTAINER_NAME=&#34;project-tfstate-sa-blob&#34;
+
+# Create resource group
+az group create --name $RESOURCE_GROUP_NAME --location eastus
+
+# Create storage account
+az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob
+
+# Create blob container
+az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
+</code></pre><h3 class="relative group">Create Terraform State 
+    <div id="create-terraform-state" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#create-terraform-state" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Terraform’s backend defines where Terraform stores its state data files. Thus, we define backend in your Terraform configuration to create Azure Blob Storage backend.</p>
+<blockquote>
+<p>Note: We use the name of Storage Account, resource group, and blob storage created in the pervious step as variables in those configurations.</p>
+</blockquote>
+<pre tabindex="0"><code># provider.tf
+
+terraform {
+  backend &#34;azurerm&#34; {
+    resource_group_name  = &#34;project-tfstate&#34;
+    storage_account_name = &#34;project-tfstate-sa&#34;
+    container_name       = &#34;project-tfstate-sa-blob&#34;
+    key                  = &#34;demo.terraform.tfstate&#34;
+  }
+}
+</code></pre><h3 class="relative group">Provider Configuration 
+    <div id="provider-configuration" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#provider-configuration" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Terraform relies on plugins called providers to interact with cloud providers, SaaS providers, and other APIs. Thus, we add provider <em><strong>&ldquo;azurerm&rdquo;</strong></em> for Terraform to interact with Azure.</p>
+<blockquote>
+<p>Note: Specify the version on provider as for provider versioning, and avoid accidental upgrades to incompatible new versions.</p>
+</blockquote>
+<pre tabindex="0"><code># provider.tf
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = &#34;hashicorp/azurerm&#34;
+      version = &#34;=3.79.0&#34;
+    }
+  }
+  backend &#34;azurerm&#34; {
+    ....
+  }
+}
+
+# Configure the Azure provider
+provider &#34;azurerm&#34; {
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy    = true
+      recover_soft_deleted_key_vaults = true
+    }
+  }
+  storage_use_azuread        = true
+  skip_provider_registration = true
+}
+</code></pre><h2 class="relative group">Step 2: Creating Cloud Resource with Terraform 
+    <div id="step-2-creating-cloud-resource-with-terraform" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#step-2-creating-cloud-resource-with-terraform" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>As for 3-Tier architecture, we will create VMs, Kubernetes cluster, Database, Storage, VNet, etc step by step. Before we start coding on resources, we define some variables first.</p>
+<h3 class="relative group">Variables and Data 
+    <div id="variables-and-data" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#variables-and-data" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Specifying their values in variable definitions files(with a filename ending in either .tfvars or .tfvars.json) helps to set lots of variables in different environments. So we divide 1 .tfvar file to set the value of variable per environment and 1 .tf file to declare input variables.</p>
+<blockquote>
+<p>Note: We can specify file by environment on the terraform command line with flag <em><strong>&quot;-var-file&quot;</strong></em>. The command will be shown later.</p>
+</blockquote>
+<pre tabindex="0"><code># test.tfvars
+environment = &#34;test&#34;
+location    = &#34;East Asia&#34;
+
+# variable.tf
+variable &#34;environment&#34; {
+  type = string
+}
+
+variable &#34;location&#34; {
+  type = string
+}
+</code></pre><p>More, we use terraform data to get current Azure subscription and current configuration of AzureRM provider.</p>
+<pre tabindex="0"><code># data.tf
+data &#34;azurerm_subscription&#34; &#34;current&#34; {}
+
+data &#34;azurerm_client_config&#34; &#34;current&#34; {}
+</code></pre><blockquote>
+<p>Note: Data sources serve as a bridge between the current infrastructure and the desired configuration, allowing for more dynamic and context-aware provisioning.</p>
+</blockquote>
+<h3 class="relative group">Resource Group 
+    <div id="resource-group" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#resource-group" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Providing a management layer that enables you to manage resources in Azure account, we create a resource group first and organize our infrastructure within the resource group.</p>
+<pre tabindex="0"><code># Resource Group
+resource &#34;azurerm_resource_group&#34; &#34;project&#34; {
+  name     = &#34;project-rg-${var.environment}&#34;
+  location = var.location
+
+  tags = {
+    Environment = &#34;${var.environment}&#34;
+  }
+}
+</code></pre><h3 class="relative group">Virtual Network 
+    <div id="virtual-network" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#virtual-network" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Let’s create an Azure Virtual Network and subnets.</p>
+<h4 class="relative group">VNet 
+    <div id="vnet" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#vnet" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>This deploys a virtual network called <em><strong>&ldquo;project-vnet-test&rdquo;</strong></em> inside resource group <em><strong>&ldquo;project-rg-test&rdquo;</strong></em> with an address space of <em><strong>&ldquo;10.0.0.0/16&rdquo;</strong></em>, which will allow you to deploy multiple subnets in that range.</p>
+<pre tabindex="0"><code># vnet.tf
+# Create a virtual network
+resource &#34;azurerm_virtual_network&#34; &#34;project&#34; {
+  name                = &#34;project-vnet-${var.environment}&#34;
+  address_space       = [&#34;10.0.0.0/16&#34;]
+  location            = azurerm_resource_group.project.location
+  resource_group_name = azurerm_resource_group.project.name
+
+  tags = {
+    Environment = &#34;${var.environment}&#34;
+  }
+}
+</code></pre><h4 class="relative group">Subnet 
+    <div id="subnet" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#subnet" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Building 3 subnets for AKS Node pool, Storage Account, and MySQL, we hold CIDR <em><strong>&ldquo;10.0.2.0/24&rdquo;</strong></em> for later defining AKS’s network profile. Subnet are then defined with address prefixes:</p>
+<ul>
+<li><em><strong>&ldquo;10.0.1.0/24&rdquo;</strong></em> for AKS node pool subnet</li>
+<li><em><strong>&ldquo;10.0.3.0/24&rdquo;</strong></em> for Storage subnet</li>
+<li><em><strong>&ldquo;10.0.4.0/24&rdquo;</strong></em> for MySQL subnet</li>
+</ul>
+<p>For subnet  <em><strong>&ldquo;project-db-subnet-test&rdquo;</strong></em>, we delegated the subnet to <em><strong>&ldquo;Microsoft.DBforMySQL/flexibleServers&rdquo;</strong></em> means that only Azure Database for MySQL flexible server instances can use that subnet.</p>
+<p>Last but not least, all subnets were added <em><strong>&ldquo;Microsoft.Storage&rdquo;</strong></em> for service endpoint for secure and direct connectivity to Azure Storage service.</p>
+<blockquote>
+<p>Note: Virtual Network (VNet) service endpoint provides secure and direct connectivity to Azure services over an optimized route over the Azure backbone network.</p>
+</blockquote>
+<blockquote>
+<p>Note: Subnet delegation provides full control to the customer on managing the integration of Azure services into their virtual networks.</p>
+</blockquote>
+<pre tabindex="0"><code># vnet.tf
+### CIDR &#34;10.0.2.0/24&#34; is delegated for AKS services
+
+# Subnet for AKS node pool
+resource &#34;azurerm_subnet&#34; &#34;node_subnet&#34; {
+  name                 = &#34;project-node-subnet-${var.environment}&#34;
+  resource_group_name  = azurerm_resource_group.project.name
+  virtual_network_name = azurerm_virtual_network.project.name
+  address_prefixes     = [&#34;10.0.1.0/24&#34;]
+  service_endpoints    = [&#34;Microsoft.Storage&#34;]
+}
+
+# Subnet for Storage
+resource &#34;azurerm_subnet&#34; &#34;storage_subnet&#34; {
+  name                 = &#34;project-storage-${var.environment}&#34;
+  resource_group_name  = azurerm_resource_group.project.name
+  virtual_network_name = azurerm_virtual_network.project.name
+  address_prefixes     = [&#34;10.0.3.0/24&#34;]
+  service_endpoints    = [&#34;Microsoft.Storage&#34;]
+}
+
+# Subnet for MySQL
+resource &#34;azurerm_subnet&#34; &#34;db_subnet&#34; {
+  name                 = &#34;project-db-subnet-${var.environment}&#34;
+  resource_group_name  = azurerm_resource_group.project.name
+  virtual_network_name = azurerm_virtual_network.project.name
+  address_prefixes     = [&#34;10.0.4.0/24&#34;]
+  service_endpoints    = [&#34;Microsoft.Storage&#34;]
+  delegation {
+    name = &#34;fs&#34;
+    service_delegation {
+      name = &#34;Microsoft.DBforMySQL/flexibleServers&#34;
+      actions = [
+        &#34;Microsoft.Network/virtualNetworks/subnets/join/action&#34;,
+      ]
+    }
+  }
+}
+</code></pre><h3 class="relative group">Network Security Group 
+    <div id="network-security-group" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#network-security-group" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Security rules in network security groups enable us to filter the type of network traffic that can flow in and out of virtual network subnets and network interfaces. We create 1 NSG to filter traffic that flow in and out MySQL subnet.</p>
+<pre tabindex="0"><code># nsg.tf
+# Security Group
+resource &#34;azurerm_network_security_group&#34; &#34;nsg&#34; {
+  name                = &#34;project-sg-${var.environment}&#34;
+  location            = azurerm_resource_group.project.location
+  resource_group_name = azurerm_resource_group.project.name
+
+  security_rule {
+    name                       = &#34;AllowMySQL&#34;
+    priority                   = 100
+    direction                  = &#34;Inbound&#34;
+    access                     = &#34;Allow&#34;
+    protocol                   = &#34;Tcp&#34;
+    source_port_range          = &#34;*&#34;
+    destination_port_range     = &#34;3306&#34;
+    source_address_prefix      = &#34;10.0.2.0/24&#34;
+    destination_address_prefix = &#34;10.0.4.0/24&#34;
+  }
+
+  tags {
+    environment = &#34;${var.environment}&#34;
+  }
+}
+
+resource &#34;azurerm_subnet_network_security_group_association&#34; &#34;data&#34; {
+  subnet_id                 = azurerm_subnet.example.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
+</code></pre><h3 class="relative group">User Assigned Identity 
+    <div id="user-assigned-identity" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#user-assigned-identity" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>We then create 1 UAI as prerequisites for MySQL server. The managed identity will be configured to MySQL server, and so we can authorize with UAI to MySQL database securly.</p>
+<blockquote>
+<p>Note: You may also create a <a href="https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview"   target="_blank">
+    managed identity</a> as a standalone Azure resource. You can create a user-assigned managed identity and assign it to one or more Azure Resources.</p>
+</blockquote>
+<pre tabindex="0"><code># uai.tf
+# User Assigned Identity
+resource &#34;azurerm_user_assigned_identity&#34; &#34;uai&#34; {
+  name                = &#34;project-uai-${var.environment}&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  location            = azurerm_resource_group.project.location
+}
+</code></pre><h3 class="relative group">Key Vault 
+    <div id="key-vault" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#key-vault" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>More, we create Key Vault as secure store for secrets. And 2 2048 bit RSA keys will be created, separately for <a href="https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-customer-managed-key"   target="_blank">
+    MySQL</a> and <a href="https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&amp;bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json"   target="_blank">
+    Storage Account</a>.</p>
+<blockquote>
+<p>Note: Premium level pricing tier adds Thales HSM (Hardware Security Modules) to Key Vault comparing to standard level pricing tier. please refer to <a href="https://azure.microsoft.com/en-us/pricing/details/key-vault/"   target="_blank">
+    Azure Key Vault pricing</a>.</p>
+</blockquote>
+<blockquote>
+<p>Note: Access policys of key vault is nearly providing full access to UAI and user as for demo. Please adjust according to your need. Here is one example on requirement of access policy for <a href="https://learn.microsoft.com/en-us/azure/mysql/flexible-server/how-to-data-encryption-portal"   target="_blank">
+    Data encryption for Azure Database for MySQLMySQL fexible server</a>.</p>
+</blockquote>
+<pre tabindex="0"><code># key_vault.tf
+# Key Vault
+resource &#34;azurerm_key_vault&#34; &#34;key&#34; {
+  name                        = &#34;project-dbkey-${var.environment}&#34;
+  location                    = azurerm_resource_group.project.location
+  resource_group_name         = azurerm_resource_group.project.name
+  enabled_for_disk_encryption = true
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days  = 90    # value can be between 7 and 90 (the default) days
+  purge_protection_enabled    = true  # Once Purge Protection has been enabled it&#39;s not possible to disable it
+  sku_name = &#34;standard&#34; # refer to pricing tier, possible values are standard and premium
+}
+
+# Access Policy for yourself
+resource &#34;azurerm_key_vault_access_policy&#34; &#34;yourself&#34; {
+  key_vault_id = azurerm_key_vault.key.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
+
+  key_permissions = [
+    &#34;Get&#34;, &#34;List&#34;, &#34;Update&#34;, &#34;Create&#34;, &#34;Import&#34;, &#34;Delete&#34;, &#34;Recover&#34;, &#34;Backup&#34;, &#34;Restore&#34;,
+    &#34;Decrypt&#34;, &#34;Encrypt&#34;, &#34;UnwrapKey&#34;, &#34;WrapKey&#34;, &#34;Verify&#34;, &#34;Sign&#34;, &#34;Purge&#34;,
+    &#34;Release&#34;, &#34;Rotate&#34;, &#34;GetRotationPolicy&#34;, &#34;SetRotationPolicy&#34;
+  ]
+
+  secret_permissions = [
+    &#34;Backup&#34;, &#34;Delete&#34;, &#34;Get&#34;, &#34;List&#34;, &#34;Purge&#34;, &#34;Recover&#34;, &#34;Restore&#34;, &#34;Set&#34;
+  ]
+
+  storage_permissions = [
+    &#34;Backup&#34;, &#34;Delete&#34;, &#34;DeleteSAS&#34;, &#34;Get&#34;, &#34;GetSAS&#34;, &#34;List&#34;, &#34;ListSAS&#34;, &#34;Purge&#34;,
+    &#34;Recover&#34;, &#34;RegenerateKey&#34;, &#34;Restore&#34;, &#34;Set&#34;, &#34;SetSAS&#34;, &#34;Update&#34;
+  ]
+}
+
+# Access Policy for UAI
+resource &#34;azurerm_key_vault_access_policy&#34; &#34;uai&#34; {
+  key_vault_id = azurerm_key_vault.key.id
+  tenant_id = azurerm_user_assigned_identity.uai.tenant_id
+  object_id = azurerm_user_assigned_identity.uai.principal_id
+
+  key_permissions = [
+    &#34;Get&#34;, &#34;List&#34;, &#34;Update&#34;, &#34;Create&#34;, &#34;Import&#34;, &#34;Delete&#34;, &#34;Recover&#34;, &#34;Backup&#34;, &#34;Restore&#34;,
+    &#34;Decrypt&#34;, &#34;Encrypt&#34;, &#34;UnwrapKey&#34;, &#34;WrapKey&#34;, &#34;Verify&#34;, &#34;Sign&#34;, &#34;Purge&#34;,
+    &#34;Release&#34;, &#34;Rotate&#34;, &#34;GetRotationPolicy&#34;, &#34;SetRotationPolicy&#34;
+  ]
+
+  secret_permissions = [
+    &#34;Backup&#34;, &#34;Delete&#34;, &#34;Get&#34;, &#34;List&#34;, &#34;Purge&#34;, &#34;Recover&#34;, &#34;Restore&#34;, &#34;Set&#34;
+  ]
+
+  storage_permissions = [
+    &#34;Backup&#34;, &#34;Delete&#34;, &#34;DeleteSAS&#34;, &#34;Get&#34;, &#34;GetSAS&#34;, &#34;List&#34;, &#34;ListSAS&#34;, &#34;Purge&#34;,
+    &#34;Recover&#34;, &#34;RegenerateKey&#34;, &#34;Restore&#34;, &#34;Set&#34;, &#34;SetSAS&#34;, &#34;Update&#34;
+  ]
+}
+
+# We will add Access Policy for Storage Account later
+
+# Key
+resource &#34;azurerm_key_vault_key&#34; &#34;db&#34; {
+  name         = &#34;project-dbkey-${var.environment}&#34;
+  key_vault_id = azurerm_key_vault.key.id
+  key_type     = &#34;RSA&#34;
+  key_size     = 2048
+
+  key_opts = [
+    &#34;decrypt&#34;,
+    &#34;encrypt&#34;,
+    &#34;sign&#34;,
+    &#34;unwrapKey&#34;,
+    &#34;verify&#34;,
+    &#34;wrapKey&#34;,
+  ]
+
+  rotation_policy {
+    automatic {
+      time_before_expiry = &#34;P30D&#34; #ISO 8601 duration
+    }
+
+    expire_after         = &#34;P3Y&#34; #ISO 8601 duration
+    notify_before_expiry = &#34;P29D&#34; #ISO 8601 duration
+  }
+}
+
+resource &#34;azurerm_key_vault_key&#34; &#34;storage&#34; {
+  name         = &#34;project-storagekey-${var.environment}&#34;
+  key_vault_id = azurerm_key_vault.key.id
+  key_type     = &#34;RSA&#34;
+  key_size     = 2048
+
+  key_opts = [
+    &#34;decrypt&#34;,
+    &#34;encrypt&#34;,
+    &#34;sign&#34;,
+    &#34;unwrapKey&#34;,
+    &#34;verify&#34;,
+    &#34;wrapKey&#34;,
+  ]
+
+  rotation_policy {
+    automatic {
+      time_before_expiry = &#34;P30D&#34; #ISO 8601 duration
+    }
+
+    expire_after         = &#34;P3Y&#34; #ISO 8601 duration
+    notify_before_expiry = &#34;P29D&#34; #ISO 8601 duration
+  }
+}
+</code></pre>  <!-- access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = azurerm_storage_account.project.identity.0.principal_id
+
+    key_permissions    = ["Get", "Create", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+    secret_permissions = ["Get"]
+  } -->
+<h3 class="relative group">Storage 
+    <div id="storage" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#storage" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>As mentioned before, storage will be created, to store content (eg. image, video) and log from MySQL server.</p>
+<h4 class="relative group">Storage Account 
+    <div id="storage-account" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#storage-account" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Storage Account is created as Geo-redundant storage for this demo. It takes advantage as Azure will replicates your storage account synchronously across Azure availability zones in the same region.</p>
+<blockquote>
+<p>Note: Flag &ldquo;account_replication_type&rdquo; refers to <a href="https://learn.microsoft.com/en-us/azure/storage/common/storage-redundancy"   target="_blank">
+    Azure Storage redundancy</a>. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Please adjust the value according to your needs. For example, vaule &ldquo;GRS&rdquo; may be needed for production environment.</p>
+</blockquote>
+<pre tabindex="0"><code># storage.tf
+# Storage Account
+resource &#34;azurerm_storage_account&#34; &#34;project&#34; {
+  name                     = &#34;project${var.environment}storage&#34;
+  resource_group_name      = azurerm_resource_group.project.name
+  location                 = azurerm_resource_group.project.location
+  account_tier             = &#34;Standard&#34; # refer to pricing tier, possible values are standard and premium
+  account_replication_type = &#34;ZRS&#34; # Value changing may forces a new resource to be created
+
+  large_file_share_enabled      = &#34;false&#34;
+  public_network_access_enabled = &#34;true&#34; # public network access is enabled as for testing environment
+
+  # Example to setup blob properties
+
+  # blob_properties {
+  #   change_feed_enabled      = &#34;true&#34;
+  #   last_access_time_enabled = &#34;true&#34;
+  #   versioning_enabled       = &#34;true&#34;
+  #   delete_retention_policy {
+  #     days = 35
+  #   }
+  #   restore_policy {
+  #     days = 30
+  #   }
+  # }
+
+  identity {
+    type = &#34;SystemAssigned&#34; # type of Managed Service Identity configured on Storage Account
+  }
+
+  lifecycle {
+    ignore_changes = [
+      customer_managed_key # customer managed key will be manage in other teeraform resource
+    ]
+  }
+}
+</code></pre><h4 class="relative group">Network Rules for Storage Account 
+    <div id="network-rules-for-storage-account" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#network-rules-for-storage-account" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<blockquote>
+<p>Note: Only one azurerm_storage_account_network_rules can be tied to an azurerm_storage_account.</p>
+</blockquote>
+<pre tabindex="0"><code># storage.tf
+# Network Rules for Storage Account
+resource &#34;azurerm_storage_account_network_rules&#34; &#34;myipandsubnet&#34; {
+  storage_account_id         = azurerm_storage_account.project.id
+  default_action             = &#34;Deny&#34;
+  ip_rules                   = [&#34;xxx.x.xxx.xxx&#34;] # edit value to your home IP or whitelisted ip
+  virtual_network_subnet_ids = [azurerm_subnet.storage_subnet.id, azurerm_subnet.db_subnet.id, azurerm_subnet.node_subnet.id] # subnet ids to secure the storage account
+  bypass                     = [&#34;Metrics&#34;]
+}
+</code></pre><h4 class="relative group">Data Encrytion for Storage Account 
+    <div id="data-encrytion-for-storage-account" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#data-encrytion-for-storage-account" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Notes that resource &ldquo;azurerm_storage_account&rdquo; are ignoring changes in block &ldquo;customer_managed_key&rdquo; as we manage Customer Managed Key by resource &ldquo;azurerm_storage_account_customer_managed_key&rdquo;.</p>
+<blockquote>
+<p>Note: It&rsquo;s possible to define a Customer Managed Key both within resource &ldquo;azurerm_storage_account&rdquo; via block &ldquo;customer_managed_key&rdquo;  and by using the resource &ldquo;azurerm_storage_account_customer_managed_key&rdquo;. However it&rsquo;s not possible to use both methods to manage a Customer Managed Key for a Storage Account, since there&rsquo;ll be <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_customer_managed_key"   target="_blank">
+    conflicts</a>.</p>
+</blockquote>
+<pre tabindex="0"><code># key.tf
+resource &#34;azurerm_key_vault_access_policy&#34; &#34;storage&#34; {
+  key_vault_id = azurerm_key_vault.key.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = azurerm_storage_account.project.identity.0.principal_id # Principal ID for the Service Principal associated with Identity of Storage Account
+
+  secret_permissions = [&#34;Get&#34;]
+  key_permissions    = [&#34;Get&#34;, &#34;Create&#34;, &#34;List&#34;, &#34;Restore&#34;, &#34;Recover&#34;, &#34;UnwrapKey&#34;, &#34;WrapKey&#34;, &#34;Purge&#34;, &#34;Encrypt&#34;, &#34;Decrypt&#34;, &#34;Sign&#34;, &#34;Verify&#34;]
+}
+
+# storage.tf
+# Data Encrytion for Storage Account
+resource &#34;azurerm_storage_account_customer_managed_key&#34; &#34;storage_key&#34; {
+  storage_account_id = azurerm_storage_account.project.id
+  key_vault_id       = azurerm_key_vault.key.id
+  key_name           = azurerm_key_vault_key.storage.name
+}
+</code></pre><h4 class="relative group">Storage Blob Container 
+    <div id="storage-blob-container" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#storage-blob-container" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>After all setting created, we create Blob Container to storage files.</p>
+<pre tabindex="0"><code># Storage Blob Container
+resource &#34;azurerm_storage_container&#34; &#34;project&#34; {
+  name                  = &#34;project-blob&#34;
+  storage_account_name  = azurerm_storage_account.project.name
+  container_access_type = &#34;blob&#34;
+}
+</code></pre><h3 class="relative group">MySQL 
+    <div id="mysql" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#mysql" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>For MySQL, we choose to provision MySQL Flexible Server (Azure Database for MySQL - Single Server is scheduled for retirement by <a href="https://learn.microsoft.com/en-us/azure/mysql/single-server/whats-happening-to-mysql-single-server"   target="_blank">
+    September 16, 2024</a>).</p>
+<!-- Terraform code for MySQL will divide to few parts: server and database, IAM, logging,  -->
+<blockquote>
+<p>Note: To learn difference between MySQL Single Server and MySQL Flexible Server, please refer to <a href="https://learn.microsoft.com/en-us/azure/mysql/select-right-deployment-type"   target="_blank">
+    here</a>.</p>
+</blockquote>
+<h4 class="relative group">Private DNS Zone 
+    <div id="private-dns-zone" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#private-dns-zone" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>We create Private DNS Zone for MySQL server to make sure database connect in a secure way within our VNet.</p>
+<pre tabindex="0"><code># private_dns.tf
+resource &#34;azurerm_private_dns_zone&#34; &#34;database&#34; {
+  name                = &#34;project.${var.environment}.mysql.database.azure.com&#34;
+  resource_group_name = azurerm_resource_group.project.name
+}
+
+resource &#34;azurerm_private_dns_zone_virtual_network_link&#34; &#34;db_links&#34; {
+  name                  = &#34;${azurerm_virtual_network.project.name}-${var.environment}.com&#34;
+  private_dns_zone_name = azurerm_private_dns_zone.database.name
+  resource_group_name   = azurerm_resource_group.project.name
+  virtual_network_id    = azurerm_virtual_network.project.id
+}
+</code></pre><h4 class="relative group">MySQL Database Server 
+    <div id="mysql-database-server" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#mysql-database-server" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Note that compute size &ldquo;D2ads v5&rdquo; is newly added in Region East Asia, pricing calculator isn&rsquo;t updated on the choice of MySQL compute size when I used this size. Cost is $0.1420 USD on 6 Feb 2024. For more information, please refer to <a href="https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-service-tiers-storage#service-tiers-size-and-server-types"   target="_blank">
+    compute size</a> and <a href="https://azure.microsoft.com/en-gb/pricing/calculator/"   target="_blank">
+    cost</a>.</p>
+<p>By experience, I advise to set mode of block &ldquo;high_availability&rdquo; to &ldquo;ZoneRedundant&rdquo;. It can only be set before we create it. You CANNOT change HA mode to Zone-redundant if you created server with same-zone mode once.</p>
+<blockquote>
+<p>Note: Flag &ldquo;private_dns_zone_id&rdquo; is required when setting flag &ldquo;delegated_subnet_id&rdquo;. Private DNS zone should end with suffix &lsquo;.mysql.database.azure&rsquo;.com.</p>
+</blockquote>
+<pre tabindex="0"><code># mysql.tf
+# MySQL Database Server
+resource &#34;azurerm_mysql_flexible_server&#34; &#34;main&#34; {
+  name                = &#34;project-mysqlserver-${var.environment}&#34;
+  location            = azurerm_resource_group.project.location
+  resource_group_name = azurerm_resource_group.project.name
+
+  delegated_subnet_id = azurerm_subnet.db_subnet.id #  Changing value forces a new MySQL Flexible Server to be created
+  private_dns_zone_id = azurerm_private_dns_zone.database.id
+
+  zone                   = &#34;1&#34;
+  administrator_login    = &#34;projectadmin&#34;
+  administrator_password = &#34;xxxxxx&#34; # change to your own password
+
+  sku_name = &#34;GP_Standard_D2ads_v5&#34; # refer to SKU tier and compute size
+
+  storage {
+    size_gb           = 20
+    auto_grow_enabled = true # must be &#34;true&#34; to enable `high_availability`
+  }
+
+  identity {
+    type         = &#34;UserAssigned&#34;
+    identity_ids = [azurerm_user_assigned_identity.uai.id] # use created UAI as Service Identity
+  }
+
+  # Data Encrytion
+  customer_managed_key {
+    key_vault_key_id                  = azurerm_key_vault_key.db.id # set Encrytion key with created key
+    primary_user_assigned_identity_id = azurerm_user_assigned_identity.uai.id
+  }
+
+  version = &#34;5.7&#34; # MySQL version, change to your own required version
+
+  backup_retention_days = 30 # default 7 days
+
+  high_availability {
+    mode                      = &#34;ZoneRedundant&#34; # prefer set it to ZoneRedundant, mode can be change when you created server
+    standby_availability_zone = 2
+  }
+
+  tags = {
+    Environment = &#34;${var.environment}&#34;
+  }
+
+  depends_on = [azurerm_private_dns_zone_virtual_network_link.db_links]
+
+  lifecycle {
+    ignore_changes = [
+      zone, high_availability.0.standby_availability_zone # avoid to migrate MySQL Flexible Server back to primary Availability Zone if a fail-over occured
+    ]
+    # prevent_destroy = true # prevent destroy for production environment
+  }
+}
+</code></pre><h4 class="relative group">Active Directory administrator 
+    <div id="active-directory-administrator" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#active-directory-administrator" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Here is example to provide admin access to myself. The solution can be used to provide server admin access to corresponding team with UAI.</p>
+<pre tabindex="0"><code>resource &#34;azurerm_mysql_flexible_server_active_directory_administrator&#34; &#34;me&#34; {
+  server_id   = azurerm_mysql_flexible_server.main.id
+  identity_id = azurerm_user_assigned_identity.prod.id
+  login       = &#34;sqladmin&#34;
+  object_id   = data.azurerm_client_config.current.client_id # myself
+  tenant_id   = data.azurerm_client_config.current.tenant_id # myself
+}
+</code></pre><h4 class="relative group">Server Audit Log 
+    <div id="server-audit-log" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#server-audit-log" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>We enable audit log by updating server configurations. Audit log will be exported to Storage by updating Diagnostic Setting. Retention policy of audit log will be handled later.</p>
+<blockquote>
+<p>Note: Please refer to <a href="https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs"   target="_blank">
+    audit-logs</a> and <a href="https://learn.microsoft.com/en-us/azure/mysql/flexible-server/tutorial-configure-audit"   target="_blank">
+    tutorial</a> to learn more on audit log setting, including audit log events.</p>
+</blockquote>
+<blockquote>
+<p>Note: Feature &ldquo;retention_policy&rdquo; has been <a href="https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/migrate-to-azure-storage-lifecycle-policy?tabs=cli"   target="_blank">
+    deprecated</a> in favor of resource &ldquo;azurerm_storage_management_policy&rdquo;.</p>
+</blockquote>
+<pre tabindex="0"><code># MySQL Database Server Parameters
+resource &#34;azurerm_mysql_flexible_server_configuration&#34; &#34;audit_log_enabled&#34; {
+  name                = &#34;audit_log_enabled&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  server_name         = azurerm_mysql_flexible_server.main.name
+  value               = &#34;ON&#34; # enable audit log
+}
+
+resource &#34;azurerm_mysql_flexible_server_configuration&#34; &#34;audit_log_events&#34; {
+  name                = &#34;audit_log_events&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  server_name         = azurerm_mysql_flexible_server.main.name
+  value               = &#34;CONNECTION,GENERAL&#34; # controls the events to be logged
+}
+
+# Example on setting MySQL users to be included for logging. 
+
+# resource &#34;azurerm_mysql_flexible_server_configuration&#34; &#34;audit_log_include_users&#34; {
+#   name                = &#34;audit_log_include_users&#34;
+#   resource_group_name = azurerm_resource_group.project.name
+#   server_name         = azurerm_mysql_flexible_server.main.name
+#   value               = &#34;projectadmin&#34;
+# }
+
+
+# MySQL Database Diagnostic Setting
+resource &#34;azurerm_monitor_diagnostic_setting&#34; &#34;mysqlauditlog&#34; {
+  name               = &#34;mysqlauditlog&#34;
+  target_resource_id = azurerm_mysql_flexible_server.main.id
+  storage_account_id = azurerm_storage_account.project.id # storage account that logs will be sent
+
+  enabled_log {
+    category = &#34;MySqlAuditLogs&#34; # possible values are &#34;MySqlSlowLogs&#34; and &#34;MySqlAuditLogs&#34; for MySQL flexible server
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  metric {
+    category = &#34;AllMetrics&#34;
+    enabled  = false
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  depends_on = [
+    azurerm_mysql_flexible_server_configuration.audit_log_enabled, azurerm_mysql_flexible_server_configuration.audit_log_events
+  ]
+}
+
+# Storage Lifecycle for MySQL Audit Log
+resource &#34;azurerm_storage_management_policy&#34; &#34;project_mysql&#34; {
+  storage_account_id = azurerm_storage_account.project.id
+
+  rule {
+    name    = &#34;mysql-auditlog-lifecycle&#34;
+    enabled = true
+    filters {
+      prefix_match = [&#34;am-containerlog/WorkspaceResourceId=/subscriptions&#34;]
+      blob_types   = [&#34;blockBlob&#34;]
+    }
+    actions {
+      base_blob {
+        tier_to_cool_after_days_since_modification_greater_than    = 30
+        tier_to_archive_after_days_since_modification_greater_than = 90
+        delete_after_days_since_modification_greater_than          = 2555
+      }
+      version {
+        change_tier_to_archive_after_days_since_creation = 15
+        change_tier_to_cool_after_days_since_creation    = 7
+        delete_after_days_since_creation                 = 30
+      }
+    }
+  }
+}
+</code></pre><h4 class="relative group">MySQL Database 
+    <div id="mysql-database" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#mysql-database" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>After all audit log settings created, we create MySQL Database.</p>
+<pre tabindex="0"><code># MySQL Database
+resource &#34;azurerm_mysql_flexible_database&#34; &#34;project&#34; {
+  name                = &#34;project-mysqldb-${var.environment}&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  server_name         = azurerm_mysql_flexible_server.main.name
+  charset             = &#34;utf8mb4&#34;
+  collation           = &#34;utf8mb4_unicode_ci&#34;
+}
+</code></pre><h3 class="relative group">Azure Kubernetes Cluster (AKS) 
+    <div id="azure-kubernetes-cluster-aks" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#azure-kubernetes-cluster-aks" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<h3 class="relative group">Log Analytics Workspace 
+    <div id="log-analytics-workspace" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#log-analytics-workspace" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>In order to store and read cluster log, we create Log Analytics Workspace to query log.</p>
+<pre tabindex="0"><code>log.tf
+# Log Analytics for AKS
+resource &#34;azurerm_log_analytics_workspace&#34; &#34;aks_insights&#34; {
+  name                = &#34;project-aks-${var.environment}-log&#34;
+  location            = azurerm_resource_group.project.location
+  resource_group_name = azurerm_resource_group.project.name
+  sku                 = &#34;Free&#34; # use tier &#34;Free&#34;  as for test environment, defaults to &#34;PerGB2018&#34;
+  retention_in_days   = 7 # workspace&#39;s default retention, 7 days (Free Tier only), range between 30 and 730 days for other tier
+  # daily_quota_gb = 0.5 # default value of 0.5 for free tier
+}
+</code></pre><h4 class="relative group">Kubernetes Cluster 
+    <div id="kubernetes-cluster" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#kubernetes-cluster" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. AKS will automatically create a node resource group, contains all of the infrastructure resources associated with the cluster, name as <code>&quot;MC_${resource_group}_${AKS_name}_${region}&quot;</code>.</p>
+<p>Kubenet was chosen as networking option(CNI) in my experience, as we didn&rsquo;t have enough information to design networking at the initial stage when we were working for project. I advise to choose Azure CNI for better solution, also better performance and adding transparency to network.</p>
+<blockquote>
+<p>Note: Please refer to <a href="https://mehighlow.medium.com/aks-kubenet-vs-azure-cni-363298dd53bf"   target="_blank">
+    AKS: Kubenet vs Azure CNI</a> to learn more on difference between Kubenet and Azure CNI.</p>
+</blockquote>
+<blockquote>
+<p>Note: AKS has a high Log Analytics cost, including Container Insights, Prometheus and Grafana. Determine if feature should be enable or not by consdering project budget. Learn <a href="https://learn.microsoft.com/en-us/azure/azure-monitor/containers/kubernetes-monitoring-enable?tabs=terraform"   target="_blank">
+    more</a> to enable these monitoring features.</p>
+</blockquote>
+<pre tabindex="0"><code># aks.tf
+# AKS
+resource &#34;azurerm_kubernetes_cluster&#34; &#34;main&#34; {
+  name                = &#34;project-aks-${var.environment}&#34;
+  location            = azurerm_resource_group.project.location
+  resource_group_name = azurerm_resource_group.project.name
+  dns_prefix          = &#34;project-k8s-${var.environment}&#34;
+
+  # For production change to &#34;Standard&#34;
+  sku_tier = &#34;Free&#34;   # Can also be set to Standard
+
+  # latest recommended version will be used if kubernetes_version isn&#39;t specified 
+  # kubernetes_version = 1.29
+
+  network_profile {
+    network_plugin = &#34;azure&#34; # choosing Azure CNI as networking option(CNI)
+    network_policy  = &#34;azure&#34; # currently use Azure Network Policy Manager, possible values are calico, azure and cilium
+    dns_service_ip = &#34;10.0.2.10&#34;
+    service_cidr   = &#34;10.0.2.0/24&#34;
+  }
+
+  default_node_pool {
+    name                = &#34;default&#34;
+    vm_size             = &#34;Standard_D2_v5&#34; # 2 CPU, 8 GiB, On Demand $0.1320USD for Region East Asia
+    vnet_subnet_id      = azurerm_subnet.node_subnet.id # use created node subnet
+    type                = &#34;VirtualMachineScaleSets&#34; # use &#34;VirtualMachineScaleSets&#34; in order to enable auto-scaling
+    enable_auto_scaling = true
+    node_count          = 1
+    min_count           = 1
+    max_count           = 2
+
+    # Kubernetes labels for nodes
+    node_labels = { 
+      env = &#34;test&#34;
+    }
+  }
+
+  identity {
+    type         = &#34;UserAssigned&#34;
+    identity_ids = [azurerm_user_assigned_identity.uai.id] # use created UAI as Service Identity
+  }
+
+  # Enable Container insights for real time pod logging
+  oms_agent {
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.aks_insights.id
+  }
+
+  tags = {
+    Environment = &#34;${var.environment}&#34;
+  }
+}
+
+＃ create output to config AKS in Terraform&#39;s provider if needed
+
+# output &#34;client_certificate&#34; {
+#   value = azurerm_kubernetes_cluster.main.kube_config.0.client_certificate
+# 
+#   sensitive = true
+# }
+# 
+# output &#34;kube_config&#34; {
+#   value = azurerm_kubernetes_cluster.main.kube_config_raw
+# 
+#   sensitive = true
+# }
+</code></pre><h3 class="relative group">Azure Container Registry 
+    <div id="azure-container-registry" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#azure-container-registry" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>We then create Azure Container Registry in order to build, store, and manage container images.</p>
+<pre tabindex="0"><code># Container Registry
+resource &#34;azurerm_container_registry&#34; &#34;project&#34; {
+  name                = &#34;projectRegistry${var.environment}&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  location            = azurerm_resource_group.project.location
+  sku                 = &#34;Basic&#34; # use basic tier as we dont need large storage to store image
+}
+
+# Attaching ACR to AKS
+
+# Role Assignment for AKS
+resource &#34;azurerm_role_assignment&#34; &#34;project_role&#34; {
+  principal_id                     = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+  role_definition_name             = &#34;AcrPull&#34;
+  scope                            = azurerm_container_registry.project.id
+  skip_service_principal_aad_check = true
+}
+</code></pre><h3 class="relative group">Budget 
+    <div id="budget" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#budget" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Creating budget to monitor all of Azure service charges and track your actual Azure service costs.</p>
+<h4 class="relative group">Action Group 
+    <div id="action-group" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#action-group" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Action group can perform various actions when your budget threshold is met. We can also enable mobile push notifications by enabling Azure app push notifications while configuring the action group. But here we use email as demo.</p>
+<pre tabindex="0"><code># budget.tf
+# Action Group for Contact
+resource &#34;azurerm_monitor_action_group&#34; &#34;project_subscription&#34; {
+  name                = &#34;project_subscription_monitoring_${var.environment}&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  short_name          = &#34;project&#34;
+
+  email_receiver {
+    name          = &#34;sendtoadmin&#34;
+    email_address = &#34;marcotam.work@gmail.com&#34;
+    use_common_alert_schema = true
+  }
+
+  email_receiver {
+    name                    = &#34;sendtodevops&#34;
+    email_address           = &#34;mymanager@gmail.com&#34;
+    use_common_alert_schema = true
+  }
+}
+</code></pre><h4 class="relative group">Budget 
+    <div id="budget-1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#budget-1" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>For budget, we use 2 resource groups as budget scope, with budget amount $1000 USD. And different contact option were shown in code below.</p>
+<pre tabindex="0"><code># budget.tf
+# Budget
+resource &#34;azurerm_consumption_budget_subscription&#34; &#34;project_subscription&#34; {
+  name            = &#34;project_subscription_budget-${var.environment}&#34;
+  subscription_id = data.azurerm_subscription.current.id
+
+  amount     = 1000 # setting USD$1000 for total
+  time_grain = &#34;Monthly&#34;
+
+  time_period {
+    start_date = formatdate(&#34;YYYY-MM-01&#39;T&#39;00:00:00Z&#34;, timestamp()) # take current date as start date
+  }
+
+  filter {
+    dimension {
+      name = &#34;ResourceGroupName&#34;
+      values = [
+        azurerm_resource_group.project.name, &#34;MC_project-${var.environment}_project-aks-${var.environment}_eastasia&#34; # initial resource group and AKS resource group
+      ]
+    }
+  }
+
+  notification {
+    enabled   = true
+    threshold = 70.0
+    operator  = &#34;EqualTo&#34;
+
+    # contact option on action groups
+    contact_groups = [
+      azurerm_monitor_action_group.project_subscription.id,
+    ]
+  }
+
+  notification {
+    enabled   = true
+    threshold = 100.0
+    operator  = &#34;EqualTo&#34;
+
+    # contact option on roles
+    contact_roles = [
+      &#34;Owner&#34;,
+    ]
+  }
+
+
+  notification {
+    enabled        = true
+    threshold      = 100.0
+    operator       = &#34;GreaterThan&#34;
+    threshold_type = &#34;Forecasted&#34;
+
+    # contact option on email
+    contact_emails = [
+      &#34;mymanager@gmail.com&#34;,
+      &#34;marcotam.work@gmail.com&#34;
+    ]
+  }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.main 
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      time_period
+    ]
+  }
+}
+</code></pre><h3 class="relative group">Backup 
+    <div id="backup" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#backup" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>The main targets on backup is all the data stored in project. Azure Database for MySQL flexible server automatically creates server backups. Thus, we need to create backup for storage. We will use Azure Backup to  back up our blob storage.</p>
+<h4 class="relative group">Backup Vault 
+    <div id="backup-vault" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#backup-vault" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>We create Backup vault to houses backup data for certain newer Backup workloads.</p>
+<blockquote>
+<p>Note: We choose Vaulted backup as it retain data for a maximum of 10 years. Please refer to <a href="https://learn.microsoft.com/en-us/azure/backup/blob-backup-configure-manage?tabs=vaulted-backup"   target="_blank">
+    backup for Azure Blobs using Azure Backup</a> to learn more on difference between operational and vaulted backups.</p>
+</blockquote>
+<pre tabindex="0"><code># backup.tf
+# Backup Vault
+resource &#34;azurerm_data_protection_backup_vault&#34; &#34;project&#34; {
+  name                = &#34;project-backup-${var.environment}&#34;
+  resource_group_name = azurerm_resource_group.project.name
+  location            = azurerm_resource_group.project.location
+
+  datastore_type      = &#34;VaultStore&#34; # possible values are ArchiveStore, OperationalStore, SnapshotStore and v. choose OperationalStore or VaultStore for Storage Backup
+  redundancy          = &#34;LocallyRedundant&#34; #  possible values are GeoRedundant, LocallyRedundant and ZoneRedundant. Cost will change according to value. Changing this forces a new Backup Vault to be created.
+
+  identity {
+    type = &#34;SystemAssigned&#34;
+  }
+}
+</code></pre><h4 class="relative group">Role Assignment for Storage BackUp 
+    <div id="role-assignment-for-storage-backup" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#role-assignment-for-storage-backup" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Assign required access for backup vault inorder to protect storage account from any accidental deletions by applying Backup-owned Delete Lock.</p>
+<pre tabindex="0"><code># backup.tf
+# Role Assignment for Storage BackUp
+resource &#34;azurerm_role_assignment&#34; &#34;storage_backup&#34; {
+  scope                = azurerm_storage_account.project.id
+  role_definition_name = &#34;Storage Account Backup Contributor&#34;
+  principal_id         = azurerm_data_protection_backup_vault.project.identity[0].principal_id
+}
+</code></pre><h4 class="relative group">Backup Policy and Backup Instance 
+    <div id="backup-policy-and-backup-instance" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#backup-policy-and-backup-instance" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Backup policy defines the schedule and frequency of the recovery points creation, and its retention duration in the Backup vault. Thus, we create backup for Storage Account.</p>
+<pre tabindex="0"><code># backup.tf
+# Backup policy for Storage Account
+resource &#34;azurerm_data_protection_backup_policy_blob_storage&#34; &#34;storage_policy&#34; {
+  name               = &#34;project-backup-${var.environment}&#34;
+  vault_id           = azurerm_data_protection_backup_vault.project.id
+  retention_duration = &#34;P30D&#34; # #ISO 8601 duration
+}
+
+# Backup for Storage Account
+resource &#34;azurerm_data_protection_backup_instance_blob_storage&#34; &#34;example&#34; {
+  name               = &#34;project-backup-storage-${var.environment}&#34;
+  vault_id           = azurerm_data_protection_backup_vault.project.id
+  location           = azurerm_resource_group.project.location
+  storage_account_id = azurerm_storage_account.project.id
+  backup_policy_id   = azurerm_data_protection_backup_policy_blob_storage.storage_policy.id
+
+  depends_on = [azurerm_role_assignment.storage_backup] # required role Assignment for Storage BackUp
+}
+</code></pre><h2 class="relative group">Conclusion 
+    <div id="conclusion" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#conclusion" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>The whole architecture was assumed as test environment and self-owned, so most of the tier was chosen as Free tier or the cheapest one. Beside database, monitoring and backup service are also expensive service to use here in the solution, and also some service didn&rsquo;t use in this blog like firewall. As a cloud engineer, we should always follow solid cloud strategy and best practices. Depends on your purpose, you can decide if those cloud services should be used, especially for self-hosting environment.</p>
+<p>And that&rsquo;s all for this blog, thank you!</p>
+
+        </div>
+                
+        
+
+        
+
+        
+
+
+  
+      </div>
+     
+    
+     <script>
+        var oid = "views_posts\/tf_azure-3tier\/index.md"
+        var oid_likes = "likes_posts\/tf_azure-3tier\/index.md"
+      </script>
+      
+      
+      
+      <script type="text/javascript" src="/js/page.min.5b1bad196a6075a1e11bae1dc95f24f67b610948a00525e347566c5a62338ea78f1c7224ab9a53873dcdb2a1a7d7d391b8a8ef45561297f68806c01315b0c4f6.js" integrity="sha512-WxutGWpgdaHhG64dyV8k9nthCUigBSXjR1ZsWmIzjqePHHIkq5pThz3NsqGn19ORuKjvRVYSl/aIBsATFbDE9g=="></script>
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+      
+      
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/1stpost/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Introduction</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-08-14 00:00:00 &#43;0000 UTC">14 August 2023</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top" title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+    <nav class="flex flex-row pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex flex-col list-none sm:flex-row">
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href="/tags/"
+            title="Tags">Tags</a>
+        </li>
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href="https://github.com/marcotamwork"
+            title="">GitHub</a>
+        </li>
+        
+      </ul>
+    </nav>
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      &copy;
+      2024
+      Marco Tam
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  
+  
+</footer><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://example.org/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

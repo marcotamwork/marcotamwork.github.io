@@ -18,9 +18,11 @@ And in this blog, we will first go through all steps on how we provision cloud i
 
 For more information on Terraform, please refer to [Terraform](https://developer.hashicorp.com/terraform) and [Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) for information and documents.
 
-## What we are going to build
+## Architecture
 
-By the end of the article, you will have 
+<img src="diagram.png"
+     alt="diagram"
+     style="float: left; margin-right: 10px;" />
 
 ## Before you begin
 
