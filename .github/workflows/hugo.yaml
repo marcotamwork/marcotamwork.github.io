@@ -28,31 +28,9 @@ jobs:
           HUGO_ENV: production
         run: hugo --minify --gc
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./public
-
-  deploy:
-    # Add a dependency on the build job
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
-    steps:
       - name: Deploy
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         uses: peaceiris/actions-gh-pages@v3
-        id: deployment
+        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
