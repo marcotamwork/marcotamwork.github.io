@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   
-  <title>IaC on 3-Tier architecture thorugh Terraform in Azure &middot; Marco</title>
-  <meta name="title" content="IaC on 3-Tier architecture thorugh Terraform in Azure &middot; Marco" />
+  <title>IaC on 3-Tier architecture through Terraform in Azure &middot; Marco</title>
+  <meta name="title" content="IaC on 3-Tier architecture through Terraform in Azure &middot; Marco" />
   
-  <meta name="description" content="IaC on 3-Tier architecture thorugh Terraform in Azure" />
+  <meta name="description" content="IaC on 3-Tier architecture through Terraform in Azure" />
   <meta name="keywords" content="IaC, Azure, Terraform, " />
   
   
-  <link rel="canonical" href="https://example.org/posts/tf_azure-3tier/" />
+  <link rel="canonical" href="https://marcotamwork.github.io/posts/tf_azure-3tier/" />
   
   
   
@@ -63,17 +63,17 @@
   
   
   
-  <meta property="og:title" content="IaC on 3-Tier architecture thorugh Terraform in Azure" />
-<meta property="og:description" content="IaC on 3-Tier architecture thorugh Terraform in Azure" />
+  <meta property="og:title" content="IaC on 3-Tier architecture through Terraform in Azure" />
+<meta property="og:description" content="IaC on 3-Tier architecture through Terraform in Azure" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://example.org/posts/tf_azure-3tier/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://marcotamwork.github.io/posts/tf_azure-3tier/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-02-04T00:00:00+00:00" />
 <meta property="article:modified_time" content="2024-02-04T00:00:00+00:00" />
 
 
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="IaC on 3-Tier architecture thorugh Terraform in Azure"/>
-<meta name="twitter:description" content="IaC on 3-Tier architecture thorugh Terraform in Azure"/>
+<meta name="twitter:title" content="IaC on 3-Tier architecture through Terraform in Azure"/>
+<meta name="twitter:description" content="IaC on 3-Tier architecture through Terraform in Azure"/>
 
   
   <script type="application/ld+json">
@@ -81,12 +81,12 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Posts",
-    "name": "IaC on 3-Tier architecture thorugh Terraform in Azure",
-    "headline": "IaC on 3-Tier architecture thorugh Terraform in Azure",
+    "name": "IaC on 3-Tier architecture through Terraform in Azure",
+    "headline": "IaC on 3-Tier architecture through Terraform in Azure",
     
-    "abstract": "IaC on 3-Tier architecture thorugh Terraform in Azure",
+    "abstract": "IaC on 3-Tier architecture through Terraform in Azure",
     "inLanguage": "en",
-    "url" : "https:\/\/example.org\/posts\/tf_azure-3tier\/",
+    "url" : "https:\/\/marcotamwork.github.io\/posts\/tf_azure-3tier\/",
     "author" : {
       "@type": "Person",
       "name": "Marco Tam"
@@ -100,7 +100,7 @@
     "keywords": ["IaC","Azure","Terraform"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "4195"
+    "wordCount": "4181"
   }]
   </script>
 
@@ -459,7 +459,7 @@
     <a
       class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
       href="/posts/tf_azure-3tier/"
-      >IaC on 3-Tier architecture thorugh Terraform in Azure</a
+      >IaC on 3-Tier architecture through Terraform in Azure</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
 
@@ -468,7 +468,7 @@
 
     
     <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-      IaC on 3-Tier architecture thorugh Terraform in Azure
+      IaC on 3-Tier architecture through Terraform in Azure
     </h1>
     <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
       
@@ -668,7 +668,7 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#what-we-are-going-to-build">What we are going to build</a></li>
+    <li><a href="#architecture">Architecture</a></li>
     <li><a href="#before-you-begin">Before you begin</a></li>
     <li><a href="#step-1-set-up-tf-project">Step 1: Set up TF project</a>
       <ul>
@@ -744,7 +744,7 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#what-we-are-going-to-build">What we are going to build</a></li>
+    <li><a href="#architecture">Architecture</a></li>
     <li><a href="#before-you-begin">Before you begin</a></li>
     <li><a href="#step-1-set-up-tf-project">Step 1: Set up TF project</a>
       <ul>
@@ -877,17 +877,19 @@
 <p>For more information on Terraform, please refer to <a href="https://developer.hashicorp.com/terraform"   target="_blank">
     Terraform</a> and <a href="https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs"   target="_blank">
     Azure Provider</a> for information and documents.</p>
-<h2 class="relative group">What we are going to build 
-    <div id="what-we-are-going-to-build" class="anchor"></div>
+<h2 class="relative group">Architecture 
+    <div id="architecture" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
         <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
-            style="text-decoration-line: none !important;" href="#what-we-are-going-to-build" aria-label="Anchor">#</a>
+            style="text-decoration-line: none !important;" href="#architecture" aria-label="Anchor">#</a>
     </span>        
     
 </h2>
-<p>By the end of the article, you will have</p>
+<p><img src="diagram.png"
+alt="diagram"
+style="float: left; margin-right: 10px;" /></p>
 <h2 class="relative group">Before you begin 
     <div id="before-you-begin" class="anchor"></div>
     
@@ -2259,7 +2261,7 @@ resource &#34;azurerm_data_protection_backup_instance_blob_storage&#34; &#34;exa
 </footer><div
   id="search-wrapper"
   class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
-  data-url="https://example.org/"
+  data-url="https://marcotamwork.github.io/"
   style="z-index:500"
 >
   <div

@@ -1,8 +1,8 @@
 ---
-title: "IaC on 3-Tier architecture thorugh Terraform in Azure"
+title: "IaC on 3-Tier architecture through Terraform in Azure"
 date: 2024-02-04
 draft: false
-summary: "IaC on 3-Tier architecture thorugh Terraform in Azure"
+summary: "IaC on 3-Tier architecture through Terraform in Azure"
 tags: ["IaC", "Azure", "Terraform"]
 ---
 
