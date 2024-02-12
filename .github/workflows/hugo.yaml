@@ -1,11 +1,19 @@
-name: Build and deploy Hugo site
+name: Build Hugo site
+
 on:
   push:
     branches:
       - "*"
 
 jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.0
   build:
+    needs: pre-commit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,10 +21,13 @@ jobs:
         with:
           submodules: true # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.120.1'
+          hugo-version: "0.120.1"
           extended: true
       - name: Build with Hugo
         env:
@@ -32,25 +43,29 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./public
-
   deploy:
     # Add a dependency on the build job
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
       pages: write # to deploy to Pages
       id-token: write # to verify the deployment originates from an appropriate source
-      contents: write
+
+    # Deploy to the github-pages environment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
+    # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+    # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
     steps:
-      - name: Deploy
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy to GitHub Pages
         id: deployment
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+        uses: actions/deploy-pages@v3
