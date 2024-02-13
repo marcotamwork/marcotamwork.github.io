@@ -8,13 +8,13 @@ tags: ["IaC", "Azure", "Terraform"]
 
 ## Introduction
 
-Hello everyone! In this article, I will show you how to provision cloud resources for a 3-Tier architecture through IaC by Terraform and deploy the application in Kubernetes(AKS).
+Hello everyone! In this article, I will show you how to provision cloud resources for a 3-tier architecture through IaC by Terraform and deploy the application in Kubernetes(AKS).
 
 Terraform as a cornerstone in IaC, revolutionizes modern IT practices, offering unparalleled benefits for reliability and agility. Notably, Terraform sets itself apart by being cloud-agnostic, allowing for the seamless integration of multiple providers and services, and creating a comprehensive representation and management of the entire infrastructure ecosystem and its associated services.
 
-With my experience on cloud architecture, I will demonstrate all processes from provisioning cloud infrastructure to application deployment. In this case, assuming our customer have DevOps Team to handle operational workloads and will deploy monitoring tools to observe performance of their applications, we deploy Kubernetes service instead of container service, in order to provide more control and flexibility.
+With my experience in cloud architecture, I will demonstrate all processes from provisioning cloud infrastructure to application deployment. In this case, assuming our customer has DevOps Team to handle operational workloads and will deploy monitoring tools to observe the performance of their applications, we deploy Kubernetes service instead of container service, in order to provide more control and flexibility.
 
-And in this blog, we will first go through all steps on how we provision cloud infrastructure in Azure by Terraform with well-designed cloud strategy, from considering aspect of security, data protection, monitoring, etc. So, let's get started!
+In this blog, we will first go through all the steps on how we provision cloud infrastructure in Azure by Terraform with well-designed cloud strategy, from considering aspects of security, data protection, monitoring, etc. So, let's get started!
 
 For more information on Terraform, please refer to [Terraform](https://developer.hashicorp.com/terraform) and [Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) for information and documents.
 
@@ -204,14 +204,12 @@ resource "azurerm_virtual_network" "project" {
 
 #### Subnet
 
-Building 3 subnets for AKS Node pool, Storage Account, and MySQL, we hold CIDR ***"10.0.2.0/24"*** for later defining AKS’s network profile. Subnet are then defined with address prefixes:
+Building 3 subnets for AKS Node pool, Storage Account, and MySQL, we hold CIDR ***"10.0.2.0/24"*** for later defining AKS’s network profile. Subnets are then defined with address prefixes:
   - ***"10.0.1.0/24"*** for AKS node pool subnet
   - ***"10.0.3.0/24"*** for Storage subnet
   - ***"10.0.4.0/24"*** for MySQL subnet
 
-For subnet  ***"project-db-subnet-test"***, we delegated the subnet to ***"Microsoft.DBforMySQL/flexibleServers"*** means that only Azure Database for MySQL flexible server instances can use that subnet. 
-
-Last but not least, all subnets were added ***"Microsoft.Storage"*** for service endpoint for secure and direct connectivity to Azure Storage service.
+For subnet  ***"project-db-subnet-test"***, we delegated the subnet to ***"Microsoft.DBforMySQL/flexibleServers"*** which means that only Azure Database for MySQL flexible server instances can use that subnet. Last, but not least, all subnets were added ***"Microsoft.Storage"*** for service endpoint for secure and direct connectivity to Azure Storage service.
 
 >Note: Virtual Network (VNet) service endpoint provides secure and direct connectivity to Azure services over an optimized route over the Azure backbone network.
 
@@ -261,7 +259,7 @@ resource "azurerm_subnet" "db_subnet" {
 
 ### Network Security Group
 
-Security rules in network security groups enable us to filter the type of network traffic that can flow in and out of virtual network subnets and network interfaces. We create 1 NSG to filter traffic that flow in and out MySQL subnet. 
+Security rules in network security groups enable us to filter the type of network traffic that can flow in and out of virtual network subnets and network interfaces. We create 1 NSG to filter traffic that flows in and out MySQL subnet. 
 
 ```
 # nsg.tf
@@ -296,7 +294,7 @@ resource "azurerm_subnet_network_security_group_association" "data" {
 
 ### User Assigned Identity
 
-We then create 1 UAI as prerequisites for MySQL server. The managed identity will be configured to MySQL server, and so we can authorize with UAI to MySQL database securly.
+We then create 1 UAI as prerequisite for MySQL server. The managed identity will be configured to MySQL server, so we can authorize UAI to MySQL database securely.
 
 >Note: You may also create a [managed identity](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview) as a standalone Azure resource. You can create a user-assigned managed identity and assign it to one or more Azure Resources.
 
@@ -313,7 +311,7 @@ resource "azurerm_user_assigned_identity" "uai" {
 
 ### Key Vault
 
-More, we create Key Vault as secure store for secrets. And 2 2048 bit RSA keys will be created, separately for [MySQL](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-customer-managed-key) and [Storage Account](https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json). 
+Moreover, we create Key Vault as secure store for secrets. And 2 2048-bit RSA keys will be created, separately for [MySQL](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-customer-managed-key) and [Storage Account](https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json). 
 
 >Note: Premium level pricing tier adds Thales HSM (Hardware Security Modules) to Key Vault comparing to standard level pricing tier. please refer to [Azure Key Vault pricing](https://azure.microsoft.com/en-us/pricing/details/key-vault/).
 
@@ -445,7 +443,7 @@ As mentioned before, storage will be created, to store content (eg. image, video
 
 #### Storage Account
 
-Storage Account is created as Geo-redundant storage for this demo. It takes advantage as Azure will replicates your storage account synchronously across Azure availability zones in the same region.
+Storage Account is created as Geo-redundant storage for this demo. It takes advantage as Azure will replicate your storage account synchronously across Azure availability zones in the same region.
 
 >Note: Flag "account_replication_type" refers to [Azure Storage redundancy](https://learn.microsoft.com/en-us/azure/storage/common/storage-redundancy). Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Please adjust the value according to your needs. For example, vaule "GRS" may be needed for production environment.
 
@@ -503,7 +501,7 @@ resource "azurerm_storage_account_network_rules" "myipandsubnet" {
 }
 ```
 
-#### Data Encrytion for Storage Account
+#### Data Encryption for Storage Account
 
 Notes that resource "azurerm_storage_account" are ignoring changes in block "customer_managed_key" as we manage Customer Managed Key by resource "azurerm_storage_account_customer_managed_key".
 
@@ -531,7 +529,7 @@ resource "azurerm_storage_account_customer_managed_key" "storage_key" {
 
 #### Storage Blob Container
 
-After all setting created, we create Blob Container to storage files.
+After all settings are created, we create Blob Container to storage files.
 
 ```
 # Storage Blob Container
@@ -545,13 +543,13 @@ resource "azurerm_storage_container" "project" {
 ### MySQL
 
 For MySQL, we choose to provision MySQL Flexible Server (Azure Database for MySQL - Single Server is scheduled for retirement by [September 16, 2024](https://learn.microsoft.com/en-us/azure/mysql/single-server/whats-happening-to-mysql-single-server)).
-<!-- Terraform code for MySQL will divide to few parts: server and database, IAM, logging,  -->
+<!-- Terraform code for MySQL will be divided into a few parts: server and database, IAM, logging,  -->
 
 >Note: To learn difference between MySQL Single Server and MySQL Flexible Server, please refer to [here](https://learn.microsoft.com/en-us/azure/mysql/select-right-deployment-type).
 
 #### Private DNS Zone
 
-We create Private DNS Zone for MySQL server to make sure database connect in a secure way within our VNet.
+We create Private DNS Zone for MySQL server to make sure database connects securely within our VNet.
 
 ```
 # private_dns.tf
@@ -570,9 +568,9 @@ resource "azurerm_private_dns_zone_virtual_network_link" "db_links" {
 
 #### MySQL Database Server
 
-Note that compute size "D2ads v5" is newly added in Region East Asia, pricing calculator isn't updated on the choice of MySQL compute size when I used this size. Cost is $0.1420 USD on 6 Feb 2024. For more information, please refer to [compute size](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-service-tiers-storage#service-tiers-size-and-server-types) and [cost](https://azure.microsoft.com/en-gb/pricing/calculator/).
+Note that compute size "D2ads v5" is newly added in Region East Asia, pricing calculator isn't updated on the choice of MySQL compute size when I used this size. The cost is USD 0.1420 on 6 Feb 2024. For more information, please refer to [the compute size](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-service-tiers-storage#service-tiers-size-and-server-types) and [cost](https://azure.microsoft.com/en-gb/pricing/calculator/).
 
-By experience, I advise to set mode of block "high_availability" to "ZoneRedundant". It can only be set before we create it. You CANNOT change HA mode to Zone-redundant if you created server with same-zone mode once.
+By experience, I advise setting mode of block "high_availability" to "ZoneRedundant". It can only be set before we create it. You CANNOT change HA mode to Zone-redundant if you created server with same-zone mode once.
 
 >Note: Flag "private_dns_zone_id" is required when setting flag "delegated_subnet_id". Private DNS zone should end with suffix '.mysql.database.azure'.com.
 
@@ -635,7 +633,7 @@ resource "azurerm_mysql_flexible_server" "main" {
 
 #### Active Directory administrator
 
-Here is example to provide admin access to myself. The solution can be used to provide server admin access to corresponding team with UAI.
+Here is an example to provide admin access to myself. The solution can be used to provide server admin access to corresponding team with UAI.
 
 ```
 resource "azurerm_mysql_flexible_server_active_directory_administrator" "me" {
@@ -649,7 +647,7 @@ resource "azurerm_mysql_flexible_server_active_directory_administrator" "me" {
 
 #### Server Audit Log
 
-We enable audit log by updating server configurations. Audit log will be exported to Storage by updating Diagnostic Setting. Retention policy of audit log will be handled later.
+We enable audit logs by updating server configurations. Audit log will be exported to Storage by updating Diagnostic Setting. Retention policy of audit log will be handled later.
 
 >Note: Please refer to [audit-logs](https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs) and [tutorial](https://learn.microsoft.com/en-us/azure/mysql/flexible-server/tutorial-configure-audit) to learn more on audit log setting, including audit log events.
 
@@ -735,7 +733,7 @@ resource "azurerm_storage_management_policy" "project_mysql" {
 ```
 #### MySQL Database
 
-After all audit log settings created, we create MySQL Database.
+After all audit log settings are created, we create MySQL Database.
 
 ```
 # MySQL Database
@@ -752,7 +750,7 @@ resource "azurerm_mysql_flexible_database" "project" {
 
 ### Log Analytics Workspace
 
-In order to store and read cluster log, we create Log Analytics Workspace to query log.
+To store and read cluster logs, we create Log Analytics Workspace to query logs.
 
 ```
 log.tf
@@ -769,13 +767,13 @@ resource "azurerm_log_analytics_workspace" "aks_insights" {
 
 #### Kubernetes Cluster
 
-As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. AKS will automatically create a node resource group, contains all of the infrastructure resources associated with the cluster, name as `"MC_${resource_group}_${AKS_name}_${region}"`. 
+As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. AKS will automatically create a node resource group, that contains all of the infrastructure resources associated with the cluster, named `"MC_${resource_group}_${AKS_name}_${region}"`. 
 
-Kubenet was chosen as networking option(CNI) in my experience, as we didn't have enough information to design networking at the initial stage when we were working for project. I advise to choose Azure CNI for better solution, also better performance and adding transparency to network.
+Kubenet was chosen as networking option(CNI) in my experience, as we didn't have enough information to design networking at the initial stage when we were working on project. I advise choosing Azure CNI for better solutions, also better performance, and adding transparency to network.
 
->Note: Please refer to [AKS: Kubenet vs Azure CNI](https://mehighlow.medium.com/aks-kubenet-vs-azure-cni-363298dd53bf) to learn more on difference between Kubenet and Azure CNI.
+>Note: Please refer to [AKS: Kubenet vs Azure CNI](https://mehighlow.medium.com/aks-kubenet-vs-azure-cni-363298dd53bf) to learn more about the difference between Kubenet and Azure CNI.
 
->Note: AKS has a high Log Analytics cost, including Container Insights, Prometheus and Grafana. Determine if feature should be enable or not by consdering project budget. Learn [more](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/kubernetes-monitoring-enable?tabs=terraform) to enable these monitoring features.
+>Note: AKS has a high Log Analytics cost, including Container Insights, Prometheus, and Grafana. Determine if feature should be enabled or not by considering project budget. Learn [more](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/kubernetes-monitoring-enable?tabs=terraform) to enable these monitoring features.
 
 ```
 # aks.tf
@@ -847,7 +845,7 @@ resource "azurerm_kubernetes_cluster" "main" {
 
 ### Azure Container Registry
 
-We then create Azure Container Registry in order to build, store, and manage container images.
+We then create Azure Container Registry to build, store, and manage container images.
 
 ```
 # Container Registry
@@ -875,7 +873,7 @@ Creating budget to monitor all of Azure service charges and track your actual Az
 
 #### Action Group
 
-Action group can perform various actions when your budget threshold is met. We can also enable mobile push notifications by enabling Azure app push notifications while configuring the action group. But here we use email as demo.
+Action groups can perform various actions when your budget threshold is met. We can also enable mobile push notifications by enabling Azure app push notifications while configuring the action group. But here we use email as a demo.
 
 ```
 # budget.tf
@@ -901,7 +899,7 @@ resource "azurerm_monitor_action_group" "project_subscription" {
 
 #### Budget
 
-For budget, we use 2 resource groups as budget scope, with budget amount $1000 USD. And different contact option were shown in code below.
+For budget, we use 2 resource groups as budget scope, with a budget amount of USD 1000. Different contact options are shown in code below.
 
 ```
 # budget.tf
@@ -977,13 +975,13 @@ resource "azurerm_consumption_budget_subscription" "project_subscription" {
 
 ### Backup
 
-The main targets on backup is all the data stored in project. Azure Database for MySQL flexible server automatically creates server backups. Thus, we need to create backup for storage. We will use Azure Backup to  back up our blob storage.
+The main backup target is all the data stored in the project. Azure Database for MySQL flexible server automatically creates server backups. Thus, we need to create backup for storage. We will use Azure Backup to back up our blob storage.
 
 #### Backup Vault
 
-We create Backup vault to houses backup data for certain newer Backup workloads.
+We create Backup vault to house backup data for certain newer Backup workloads.
 
->Note: We choose Vaulted backup as it retain data for a maximum of 10 years. Please refer to [backup for Azure Blobs using Azure Backup](https://learn.microsoft.com/en-us/azure/backup/blob-backup-configure-manage?tabs=vaulted-backup) to learn more on difference between operational and vaulted backups.
+>Note: We choose Vaulted backup as it retains data for a maximum of 10 years. Please refer to [backup for Azure Blobs using Azure Backup](https://learn.microsoft.com/en-us/azure/backup/blob-backup-configure-manage?tabs=vaulted-backup) to learn more about the difference between operational and vaulted backups.
 
 ```
 # backup.tf
@@ -1004,7 +1002,7 @@ resource "azurerm_data_protection_backup_vault" "project" {
 
 #### Role Assignment for Storage BackUp
 
-Assign required access for backup vault inorder to protect storage account from any accidental deletions by applying Backup-owned Delete Lock. 
+Assign required access to backup vault to protect storage account from any accidental deletions by applying a Backup-owned Delete Lock. 
 
 ```
 # backup.tf
@@ -1018,7 +1016,7 @@ resource "azurerm_role_assignment" "storage_backup" {
 
 #### Backup Policy and Backup Instance
 
-Backup policy defines the schedule and frequency of the recovery points creation, and its retention duration in the Backup vault. Thus, we create backup for Storage Account.
+Backup policy defines the schedule and frequency of the recovery points creation and their retention duration in the Backup vault. Thus, we create backup for Storage Account.
 
 ```
 # backup.tf
@@ -1043,8 +1041,7 @@ resource "azurerm_data_protection_backup_instance_blob_storage" "example" {
 
 ## Conclusion
 
-The whole architecture was assumed as test environment and self-owned, so most of the tier was chosen as Free tier or the cheapest one. Beside database, monitoring and backup service are also expensive service to use here in the solution, and also some service didn't use in this blog like firewall. As a cloud engineer, we should always follow solid cloud strategy and best practices. Depends on your purpose, you can decide if those cloud services should be used, especially for self-hosting environment.
+The whole architecture was assumed as test environment and self-owned, so most of the tier was chosen as Free tier or the cheapest one. Besides the database, monitoring, and backup services are also expensive services to use here in the solution, and some services aren’t used in this blog like firewall. As a cloud engineer, we should always follow solid cloud strategies and best practices. Depending on your purpose, you can decide if those cloud services should be used, especially for a self-hosting environment.
 
-And that's all for this blog, thank you!
-
+And that’s all for this blog, thank you!
 
