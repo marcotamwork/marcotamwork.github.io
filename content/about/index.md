@@ -30,15 +30,6 @@ In addition to my love for cloud technology, I'm also a squash player currently 
 
 {{< carousel images="gallery/*" >}}
 
-<!-- {{< gallery >}}
-  <img src="gallery/BB_chacha.jpeg" class="grid-w33"/>
-  <img src="gallery/BB.jpeg" class="grid-w33" />
-  <img src="gallery/chacha_makmak.jpeg" class="grid-w33" />
-  <img src="gallery/fat_chacha.jpeg" class="grid-w33" />
-  <img src="gallery/makmak.jpeg" class="grid-w33" />
-{{< /gallery >}}
-> -->
-
 ## What I do
 
 In my role as a Cloud Engineer, I am deeply engaged in crafting robust cloud architectures and implementing efficient DevOps practices. My journey in Cloud Engineering is driven by a passion for leveraging technology to optimize business operations and drive growth. Under the mentorship of Jam at Green Tomato, I've honed my expertise in designing scalable cloud solutions that align with strategic business objectives. Effective collaboration and communication with cross-functional teams are integral to my approach, ensuring seamless deployment and management of cloud infrastructures. I am dedicated to continuous learning and innovation, staying abreast of industry trends to deliver cutting-edge solutions that meet evolving business needs.
