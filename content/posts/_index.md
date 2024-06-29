@@ -13,7 +13,6 @@ cascade:
   showReadingTime : true
   showHeadingAnchors : true
 # showPagination : false
-
 # showTableOfContents : true
 # showTaxonomies : false 
 # showWordCount : false
