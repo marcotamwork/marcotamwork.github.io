@@ -1,22 +1,12 @@
 ---
-title: "IaC on 3-Tier architecture through Terraform in Azure"
-date: 2024-02-04
+title: "IaC on 3-Tier architecture through Terraform in Azure - Part 2 Resource on Azure"
+date: 2024-06-28
 draft: false
 summary: "IaC on 3-Tier architecture through Terraform in Azure"
 tags: ["IaC", "Azure", "Terraform"]
+series: ["IaC on 3-Tier architecture through Terraform in Azure"]
+series_order: 2
 ---
-
-## Introduction
-
-Hello everyone! In this article, I will show you how to provision cloud resources for a 3-tier architecture through IaC by Terraform and deploy the application in Kubernetes(AKS).
-
-Terraform as a cornerstone in IaC, revolutionizes modern IT practices, offering unparalleled benefits for reliability and agility. Notably, Terraform sets itself apart by being cloud-agnostic, allowing for the seamless integration of multiple providers and services, and creating a comprehensive representation and management of the entire infrastructure ecosystem and its associated services.
-
-With my experience in cloud architecture, I will demonstrate all processes from provisioning cloud infrastructure to application deployment. In this case, assuming our customer has DevOps Team to handle operational workloads and will deploy monitoring tools to observe the performance of their applications, we deploy Kubernetes service instead of container service, in order to provide more control and flexibility.
-
-In this blog, we will first go through all the steps on how we provision cloud infrastructure in Azure by Terraform with well-designed cloud strategy, from considering aspects of security, data protection, monitoring, etc. So, let's get started!
-
-For more information on Terraform, please refer to [Terraform](https://developer.hashicorp.com/terraform) and [Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) for information and documents.
 
 ## Architecture
 
@@ -24,108 +14,7 @@ For more information on Terraform, please refer to [Terraform](https://developer
      alt="diagram"
      style="float: left; margin-right: 10px;" />
 
-## Before you begin
-
-To complete this document you need the following resources:
-
-- Azure Account
-- Azure Service Principal
-
-To create Azure Account and Service Principal, please refer to [Azure Account](https://azure.microsoft.com/en-us/free) and [Azure Service Principal](https://learn.microsoft.com/en-us/training/modules/authenticate-azure-deployment-pipeline-service-principals/3-create-service-principal-key?pivots=cli).
-
-
->Note: The whole demonstration will run in bash, Azzure CLI, and TF code for further CICD.
-
-## Step 1: Set up TF project
-
-The first thing for Terraform is to set up the location of the tf state. TF state tracks the current state of your infrastructure and resources and allows Terraform to manage and update them as needed. We choose Azure Blob Storage as backend for Terraform in our demonstration.
-
->Note:  Azure Blob Storage provides server-side encryption to protect your data, by preventing unauthorized access and safeguarding sensitive data.
-
-### Create Azure Blob Storage
-
-Before you create blob storage, sign in with Azure CLI.
-
-```
-APPID="<app-id>"
-SPPASSWORD="<password-or-cert>"
-SPTENANT="<tenant>"
-
-# Login with service-principal
-az login --service-principal -u $APPID -p $SPPASSWORD --tenant $SPTENANT
-```
-
-Then, run Azure CLI to create resource group, storage account and blob container for storing tf state.
-
-```
-#!/bin/bash
-
-RESOURCE_GROUP_NAME="project-tfstate"
-STORAGE_ACCOUNT_NAME="project-tfstate-sa"
-CONTAINER_NAME="project-tfstate-sa-blob"
-
-# Create resource group
-az group create --name $RESOURCE_GROUP_NAME --location eastus
-
-# Create storage account
-az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob
-
-# Create blob container
-az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
-```
-### Create Terraform State
-
-Terraform’s backend defines where Terraform stores its state data files. Thus, we define backend in your Terraform configuration to create Azure Blob Storage backend.
-
-> Note: We use the name of Storage Account, resource group, and blob storage created in the pervious step as variables in those configurations.
-
-```
-# provider.tf
-
-terraform {
-  backend "azurerm" {
-    resource_group_name  = "project-tfstate"
-    storage_account_name = "project-tfstate-sa"
-    container_name       = "project-tfstate-sa-blob"
-    key                  = "demo.terraform.tfstate"
-  }
-}
-
-```
-### Provider Configuration
-
-Terraform relies on plugins called providers to interact with cloud providers, SaaS providers, and other APIs. Thus, we add provider ***"azurerm"*** for Terraform to interact with Azure.
-
-> Note: Specify the version on provider as for provider versioning, and avoid accidental upgrades to incompatible new versions.
-
-```
-# provider.tf
-
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.79.0"
-    }
-  }
-  backend "azurerm" {
-    ....
-  }
-}
-
-# Configure the Azure provider
-provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy    = true
-      recover_soft_deleted_key_vaults = true
-    }
-  }
-  storage_use_azuread        = true
-  skip_provider_registration = true
-}
-```
-## Step 2: Creating Cloud Resource with Terraform
+## Creating Cloud Resource with Terraform
 
 As for 3-Tier architecture, we will create VMs, Kubernetes cluster, Database, Storage, VNet, etc step by step. Before we start coding on resources, we define some variables first.
 
