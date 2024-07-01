@@ -22,13 +22,6 @@ layoutBackgroundHeaderSpace: false
 
 
 ---
-## Say Hello to everyone!
-
-Hello everyone! I'm Marco, a passionate Cloud DevOps Engineer from Hong Kong and a proud cat person. As a dedicated cat person, my three adorable companions, BB, Chacha and Makmak, bring me endless joy and comfort. They make every return home a moment of pure happiness for me.
-
-In addition to my love for cloud technology, I'm also a squash player currently looking for a squash club to join. It's a great way for me to stay active and unwind outside of work.
-
-{{< carousel images="gallery/*" >}}
 
 ## What I do
 
@@ -42,5 +35,8 @@ Recently, I earned the Azure Administrator Associate certification (AZ-104), sho
 
 As I continue to grow in my career, I am excited about the opportunity to contribute my skills in cloud architecture, DevOps practices, and continuous improvement to a new team. I believe in the transformative potential of cloud technologies and am committed to delivering solutions that drive business growth and innovation.
 
+## Meet Marco
 
-Join me on this journey as we explore the ever-evolving landscape of Cloud Engineering together!
+Hello! I’m Marco, a passionate Cloud DevOps Engineer from Hong Kong. Alongside my professional pursuits, I’m a dedicated cat person with three adorable companions: BB, Chacha, and Makmak. They bring endless joy to my life. When I’m not working or spending time with my cats, I enjoy playing squash and am currently looking for a squash club to join. Staying active and connected with others is important to me, both personally and professionally.
+
+{{< carousel images="gallery/*" >}}
