@@ -6,7 +6,17 @@
     <description>Recent content in Series on Marco</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>© 2024 Marco Tam</copyright>
-    <atom:link href="https://marcotamwork.github.io/series/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© 2025 Marco Tam</copyright>
+    <lastBuildDate>Fri, 28 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://marcotamwork.github.io/series/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IaC on 3-Tier architecture through Terraform in Azure</title>
+      <link>https://marcotamwork.github.io/series/iac-on-3-tier-architecture-through-terraform-in-azure/</link>
+      <pubDate>Fri, 28 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://marcotamwork.github.io/series/iac-on-3-tier-architecture-through-terraform-in-azure/</guid>
+      <description></description>
+      
+    </item>
+    
   </channel>
 </rss>

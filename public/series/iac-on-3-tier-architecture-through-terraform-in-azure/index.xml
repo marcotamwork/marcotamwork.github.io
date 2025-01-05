@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>IaC on 3-Tier architecture through Terraform in Azure on Marco</title>
+    <link>https://marcotamwork.github.io/series/iac-on-3-tier-architecture-through-terraform-in-azure/</link>
+    <description>Recent content in IaC on 3-Tier architecture through Terraform in Azure on Marco</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2025 Marco Tam</copyright>
+    <lastBuildDate>Fri, 28 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://marcotamwork.github.io/series/iac-on-3-tier-architecture-through-terraform-in-azure/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IaC on 3-Tier architecture through Terraform in Azure - Part 2 Resource on Azure</title>
+      <link>https://marcotamwork.github.io/posts/tf_azure-3tier-post-2/</link>
+      <pubDate>Fri, 28 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier-post-2/</guid>
+      <description>IaC on 3-Tier architecture through Terraform in Azure</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/tf_azure-3tier-post-2/featured.png" />
+    </item>
+    
+    <item>
+      <title>IaC on 3-Tier architecture through Terraform in Azure - Part 3 Resource on Azure</title>
+      <link>https://marcotamwork.github.io/posts/tf_azure-3tier-post-3/</link>
+      <pubDate>Fri, 28 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier-post-3/</guid>
+      <description>IaC on 3-Tier architecture through Terraform in Azure</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/tf_azure-3tier-post-3/featured.png" />
+    </item>
+    
+    <item>
+      <title>IaC on 3-Tier architecture through Terraform in Azure - Part 1 Prerequisite</title>
+      <link>https://marcotamwork.github.io/posts/tf_azure-3tier-post-1-setup/</link>
+      <pubDate>Thu, 27 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier-post-1-setup/</guid>
+      <description>IaC on 3-Tier architecture through Terraform in Azure</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/tf_azure-3tier-post-1-setup/featured.png" />
+    </item>
+    
+  </channel>
+</rss>

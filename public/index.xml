@@ -6,26 +6,46 @@
     <description>Recent content in Welcome to my blog! :tada: on Marco</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>© 2024 Marco Tam</copyright>
-    <lastBuildDate>Sun, 04 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://marcotamwork.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© 2025 Marco Tam</copyright>
+    <lastBuildDate>Fri, 28 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://marcotamwork.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>IaC on 3-Tier architecture through Terraform in Azure</title>
-      <link>https://marcotamwork.github.io/posts/tf_azure-3tier/</link>
-      <pubDate>Sun, 04 Feb 2024 00:00:00 +0000</pubDate>
+      <title>IaC on 3-Tier architecture through Terraform in Azure - Part 2 Resource on Azure</title>
+      <link>https://marcotamwork.github.io/posts/tf_azure-3tier-post-2/</link>
+      <pubDate>Fri, 28 Jun 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier/</guid>
+      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier-post-2/</guid>
       <description>IaC on 3-Tier architecture through Terraform in Azure</description>
-      
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/tf_azure-3tier-post-2/featured.png" />
     </item>
     
     <item>
-      <title>Introduction</title>
-      <link>https://marcotamwork.github.io/posts/1stpost/</link>
-      <pubDate>Mon, 14 Aug 2023 00:00:00 +0000</pubDate>
+      <title>IaC on 3-Tier architecture through Terraform in Azure - Part 3 Resource on Azure</title>
+      <link>https://marcotamwork.github.io/posts/tf_azure-3tier-post-3/</link>
+      <pubDate>Fri, 28 Jun 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://marcotamwork.github.io/posts/1stpost/</guid>
-      <description>This is my first post on my site</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/1stpost/featured.png" />
+      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier-post-3/</guid>
+      <description>IaC on 3-Tier architecture through Terraform in Azure</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/tf_azure-3tier-post-3/featured.png" />
+    </item>
+    
+    <item>
+      <title>IaC on 3-Tier architecture through Terraform in Azure - Part 1 Prerequisite</title>
+      <link>https://marcotamwork.github.io/posts/tf_azure-3tier-post-1-setup/</link>
+      <pubDate>Thu, 27 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://marcotamwork.github.io/posts/tf_azure-3tier-post-1-setup/</guid>
+      <description>IaC on 3-Tier architecture through Terraform in Azure</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://marcotamwork.github.io/posts/tf_azure-3tier-post-1-setup/featured.png" />
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://marcotamwork.github.io/about/</link>
+      <pubDate>Mon, 13 Jun 2022 20:55:37 +0100</pubDate>
+      
+      <guid>https://marcotamwork.github.io/about/</guid>
+      <description>What I do In my role as a Cloud Engineer, I am deeply engaged in crafting robust cloud architectures and implementing efficient DevOps practices.</description>
+      
     </item>
     
   </channel>
