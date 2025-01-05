@@ -16,8 +16,6 @@ series_order: 4
 
 ## Creating Cloud Resource with Terraform
 
-As for 3-Tier architecture, we will create VMs, Kubernetes cluster, Database, Storage, VNet, etc step by step. Before we start coding on resources, we define some variables first.
-
 ### Kubernetes Cluster
 
 As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. AKS will automatically create a node resource group, that contains all of the infrastructure resources associated with the cluster, named `"MC_${resource_group}_${AKS_name}_${region}"`. 
